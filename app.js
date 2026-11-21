@@ -16,7 +16,7 @@ const RATES = {
 };
 
 // Cloudflare Worker Endpoint
-const CF_WORKER_URL = 'https://auto-import-lead-proxy.workers.dev/api/lead';
+const CF_WORKER_URL = 'https://shy-sun-dedf.odnovalov14.workers.dev';
 
 // Car Catalog with Dedicated High-Res Studio Photos
 const CAR_CATALOG = {
