@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AutoKorea — Автомобили из Кореи и Китая под ключ с гарантией</title>
+  <meta name="description" content="Честный пригон автомобилей из Южной Кореи и Китая под ключ. Прозрачный калькулятор с растаможкой ФТС и утильсбором. Официальный договор по 152-ФЗ.">
+  
+  <!-- Modern Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <!-- Logo -->
+      <a href="#" class="brand-logo" aria-label="AutoKorea Главная">
+        <svg class="logo-svg" width="34" height="26" viewBox="0 0 40 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 22C10 14 18 6 36 6M8 24C16 16 26 12 38 12" stroke="#111827" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M2 24C6 24 10 22 14 18" stroke="#5833EA" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <div class="logo-text">
+          <span class="logo-main">AutoKorea</span>
+          <span class="logo-sub">Авто из Кореи и Китая</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="nav-menu" aria-label="Навигация по сайту">
+        <a href="#features" class="nav-link">Преимущества</a>
+        <a href="#calculator" class="nav-link">Калькулятор</a>
+        <a href="#process" class="nav-link">Как мы работаем</a>
+        <a href="#faq" class="nav-link">Контакты</a>
+      </nav>
+
+      <!-- Header Contacts & CTA -->
+      <div class="header-right">
+        <div class="phone-block">
+          <a href="tel:+78005553535" class="phone-number">
+            <svg class="phone-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24 11.72 11.72 0 003.68.59 1 1 0 011 1v3.5a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.72 11.72 0 00.59 3.68 1 1 0 01-.24 1.02l-2.23 2.09z"/></svg>
+            +7 (800) 555-35-35
+          </a>
+          <span class="phone-schedule">Пн-Вс 9:00-21:00 (МСК)</span>
+        </div>
+        <button type="button" class="btn-purple-sm" id="headerCtaBtn">Оставить заявку</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container hero-container">
+      <div class="hero-left">
+        <h1 class="hero-title">
+          Автомобили<br>
+          из Кореи и Китая<br>
+          <span class="text-purple">под ключ</span>
+        </h1>
+        <p class="hero-subtitle">Быстро. Выгодно. Надёжно.</p>
+        <button type="button" class="btn-purple-lg" id="scrollCalcBtn">
+          <span>Рассчитать стоимость</span>
+          <span class="arrow-down">↓</span>
+        </button>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-image-wrap">
+          <img src="img/hero_car.jpg" alt="Белый премиальный BMW 3 Series на фоне панорамы Сеула" class="hero-car-img" loading="eager">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust Features Bar -->
+  <section class="trust-bar" id="features">
+    <div class="container">
+      <div class="trust-container">
+        
+        <div class="trust-item">
+          <div class="trust-icon-box">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5833EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+          <div class="trust-text">
+            <strong>Гарантия</strong>
+            <span>на авто</span>
+          </div>
+        </div>
+
+        <div class="trust-item">
+          <div class="trust-icon-box">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5833EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 17l-5-5m0 0l5-5m-5 5h12"/>
+              <path d="M20 7v10a2 2 0 01-2 2H6"/>
+            </svg>
+          </div>
+          <div class="trust-text">
+            <strong>Прямые</strong>
+            <span>поставки</span>
+          </div>
+        </div>
+
+        <div class="trust-item">
+          <div class="trust-icon-box">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5833EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 3h12a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2z"/>
+              <path d="M8 12h6m-6 4h4M8 8h8"/>
+            </svg>
+          </div>
+          <div class="trust-text">
+            <strong>Прозрачные</strong>
+            <span>расчёты</span>
+          </div>
+        </div>
+
+        <div class="trust-item">
+          <div class="trust-icon-box">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5833EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="10" rx="2"/>
+              <circle cx="7" cy="17" r="2"/>
+              <circle cx="17" cy="17" r="2"/>
+              <path d="M5 11l2-5h10l2 5"/>
+            </svg>
+          </div>
+          <div class="trust-text">
+            <strong>Полное</strong>
+            <span>сопровождение</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Calculator Section -->
+  <section class="calc-section" id="calculator">
+    <div class="container">
+      <div class="calc-layout-grid">
+        
+        <!-- Calculator Left Header -->
+        <div class="calc-intro">
+          <span class="calc-eyebrow">Калькулятор</span>
+          <h2 class="calc-heading">
+            Рассчитайте<br>
+            стоимость автомобиля
+          </h2>
+          <p class="calc-subtext">Укажите параметры — и узнайте точную стоимость с доставкой и растаможкой</p>
+          <div class="curved-arrow-box" aria-hidden="true">
+            <svg width="70" height="45" viewBox="0 0 80 50" fill="none" stroke="#111827" stroke-width="1.8" stroke-linecap="round">
+              <path d="M10 10 Q 50 12 60 40 M52 35 L60 40 L64 30"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Calculator Right Form & Visual -->
+        <div class="calc-form-card">
+          <form id="calcForm" class="calc-form-body">
+            
+            <!-- Row 1: Country Toggle with Crisp SVG Flags -->
+            <div class="form-row">
+              <label class="form-row-label">Страна</label>
+              <div class="country-toggles">
+                <button type="button" class="country-toggle-btn active" data-country="korea" id="btnCountryKorea">
+                  <!-- Korea Flag SVG -->
+                  <svg class="flag-svg" width="22" height="16" viewBox="0 0 30 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="30" height="20" rx="2" fill="#FFFFFF" stroke="#E5E7EB"/>
+                    <!-- Red / Blue Taegeuk circle -->
+                    <circle cx="15" cy="10" r="4.5" fill="#C60C30"/>
+                    <path d="M15 5.5C17.5 5.5 17.5 10 15 10C12.5 10 12.5 14.5 15 14.5C12.5 14.5 10.5 12.5 10.5 10C10.5 7.5 12.5 5.5 15 5.5Z" fill="#003478"/>
+                    <circle cx="15" cy="12.25" r="2.25" fill="#003478"/>
+                    <!-- Trigrams -->
+                    <line x1="6" y1="5" x2="8" y2="7" stroke="#111827" stroke-width="1"/>
+                    <line x1="7" y1="4" x2="9" y2="6" stroke="#111827" stroke-width="1"/>
+                    <line x1="22" y1="5" x2="24" y2="7" stroke="#111827" stroke-width="1"/>
+                    <line x1="21" y1="14" x2="23" y2="16" stroke="#111827" stroke-width="1"/>
+                  </svg>
+                  <span>Корея</span>
+                </button>
+
+                <button type="button" class="country-toggle-btn" data-country="china" id="btnCountryChina">
+                  <!-- China Flag SVG -->
+                  <svg class="flag-svg" width="22" height="16" viewBox="0 0 30 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="30" height="20" rx="2" fill="#DE2910"/>
+                    <polygon points="5,3 6.5,7.5 2.5,4.7 7.5,4.7 3.5,7.5" fill="#FFDE00"/>
+                    <polygon points="10,2 10.8,3.5 9.5,2.7 11.2,2.7 9.8,3.7" fill="#FFDE00"/>
+                    <polygon points="12,4 12.8,5.5 11.5,4.7 13.2,4.7 11.8,5.7" fill="#FFDE00"/>
+                    <polygon points="12,7 12.8,8.5 11.5,7.7 13.2,7.7 11.8,8.7" fill="#FFDE00"/>
+                  </svg>
+                  <span>Китай</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Row 2: Brand Dropdown -->
+            <div class="form-row">
+              <label for="selectBrand" class="form-row-label">Марка</label>
+              <div class="select-wrapper">
+                <select id="selectBrand" class="custom-select">
+                  <!-- Populated by JS -->
+                </select>
+                <span class="select-arrow">⌄</span>
+              </div>
+            </div>
+
+            <!-- Row 3: Model Dropdown -->
+            <div class="form-row">
+              <label for="selectModel" class="form-row-label">Модель</label>
+              <div class="select-wrapper">
+                <select id="selectModel" class="custom-select">
+                  <!-- Populated by JS -->
+                </select>
+                <span class="select-arrow">⌄</span>
+              </div>
+            </div>
+
+            <!-- Row 4: Year Dropdown (Affects FTS Customs Duty & Tariffs) -->
+            <div class="form-row">
+              <label for="selectYear" class="form-row-label">Год выпуска</label>
+              <div class="select-wrapper">
+                <select id="selectYear" class="custom-select">
+                  <option value="2021" selected>2021 год (3-5 лет, льготный тариф ФТС)</option>
+                  <option value="2022">2022 год (3-5 лет, проходной)</option>
+                  <option value="2023">2023 год (до 3 лет, свежий / 48% пошлина)</option>
+                  <option value="2024">2024 год (новый / 48% пошлина)</option>
+                  <option value="2020">2020 год (старше 5 лет, повышенная ставка)</option>
+                  <option value="2019">2019 год (старше 5 лет, повышенная ставка)</option>
+                </select>
+                <span class="select-arrow">⌄</span>
+              </div>
+            </div>
+
+            <!-- Submit Calculate Button -->
+            <button type="button" class="btn-calc-submit" id="calculateBtn">
+              Рассчитать стоимость
+            </button>
+          </form>
+
+          <!-- Showcase Visual Right of Form -->
+          <div class="calc-side-visual">
+            <div class="calc-visual-backdrop"></div>
+            <img src="img/calc_cars.png" alt="Премиальные автомобили в студии" class="calc-side-img">
+          </div>
+        </div>
+      </div>
+
+      <!-- Result Card (Horizontal Banner below calc) -->
+      <div class="result-banner" id="resultBanner">
+        <div class="result-left">
+          <div class="purple-check-icon">✓</div>
+          <div class="result-price-block">
+            <span class="result-caption" id="resPriceCaption">Примерный расчёт:</span>
+            <div class="result-sum" id="resPrice">2 850 000 ₽</div>
+            <span class="result-sub" id="resPriceSub">Итоговая стоимость под ключ (с доставкой, растаможкой и услугами)</span>
+          </div>
+        </div>
+
+        <div class="result-center">
+          <img src="img/car_avante.png" alt="Hyundai Avante" class="result-car-thumb" id="resThumb">
+          <div class="result-car-info">
+            <h4 class="result-car-title" id="resTitle">Hyundai Avante</h4>
+            <p class="result-car-specs" id="resSpecs">2021 год • 1.6 л • 123 л.с.</p>
+            <button type="button" class="btn-toggle-details" id="toggleDetailsBtn">
+              <span>Параметры авто</span>
+              <span class="arrow-small">⌄</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="result-right">
+          <button type="button" class="btn-result-cta" id="orderCarBtn">
+            <span id="orderBtnText">Оставить заявку на этот автомобиль</span>
+            <span class="cta-arrow-right">→</span>
+          </button>
+          <span class="result-cta-note">Наш менеджер свяжется с вами в течение 15 минут</span>
+        </div>
+      </div>
+
+      <!-- Collapsible Detailed Breakdown Table -->
+      <div class="breakdown-drawer" id="breakdownDrawer" style="display: none;">
+        <div class="drawer-inner">
+          <h5 class="drawer-title">Детализация расчета под ключ (по тарифам ФТС РФ 2026):</h5>
+          <div class="drawer-rows">
+            <div class="drawer-row">
+              <span>Стоимость автомобиля на аукционе:</span>
+              <strong id="detailCarCost">1 750 000 ₽</strong>
+            </div>
+            <div class="drawer-row">
+              <span>Фрахт и логистика до РФ (Владивосток/Москва):</span>
+              <strong id="detailFreight">220 000 ₽</strong>
+            </div>
+            <div class="drawer-row">
+              <span>Таможенная пошлина ФТС РФ (<span id="detailDutyTag">льготный тариф 3-5 лет</span>):</span>
+              <strong id="detailDuty">445 000 ₽</strong>
+            </div>
+            <div class="drawer-row">
+              <span>Утилизационный сбор РФ (льготный для физлиц):</span>
+              <strong id="detailUtil">5 200 ₽</strong>
+            </div>
+            <div class="drawer-row">
+              <span>СБКТС, ЭПТС, услуги таможенного брокера и лаборатория:</span>
+              <strong>95 000 ₽</strong>
+            </div>
+            <div class="drawer-row">
+              <span>Комиссия компании (подбор, сопровождение, безопасная сделка):</span>
+              <strong id="detailCommission">124 800 ₽</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Process Section: "Как мы работаем" with Crisp Modern SVG Icons -->
+  <section class="process-section" id="process">
+    <div class="container process-container">
+      <div class="process-left">
+        <span class="section-tag">Как мы работаем</span>
+        <h2 class="section-heading">
+          Простой процесс<br>
+          от заявки до ключей
+        </h2>
+        <p class="section-p">Всего 4 шага — и автомобиль уже в пути к вам</p>
+        <button type="button" class="btn-outline" id="learnMoreBtn">Узнать подробнее</button>
+      </div>
+
+      <div class="process-steps-track">
+        <div class="track-line"></div>
+
+        <!-- Step 1: Подбор авто -->
+        <div class="step-col">
+          <div class="step-num-circle">1</div>
+          <div class="step-icon-box">
+            <!-- Modern Search & Car SVG Icon -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5833EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              <path d="M8 11h6"/>
+            </svg>
+          </div>
+          <h4 class="step-col-title">Подбор авто</h4>
+          <p class="step-col-desc">Находим лучшие варианты под ваши запросы на Encar и аукционах</p>
+        </div>
+
+        <!-- Step 2: Доставка -->
+        <div class="step-col">
+          <div class="step-num-circle">2</div>
+          <div class="step-icon-box">
+            <!-- Logistics / Cargo Ship & Truck SVG -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5833EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13" rx="1"/>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+              <circle cx="5.5" cy="18.5" r="2.5"/>
+              <circle cx="18.5" cy="18.5" r="2.5"/>
+            </svg>
+          </div>
+          <h4 class="step-col-title">Доставка</h4>
+          <p class="step-col-desc">Быстро и безопасно перевозим авто морем и автовозом с полной страховкой</p>
+        </div>
+
+        <!-- Step 3: Таможня -->
+        <div class="step-col">
+          <div class="step-num-circle">3</div>
+          <div class="step-icon-box">
+            <!-- Customs Shield with Document SVG -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5833EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+          <h4 class="step-col-title">Таможня</h4>
+          <p class="step-col-desc">Оформляем ЭПТС, СБКТС и все таможенные документы ФТС под ключ</p>
+        </div>
+
+        <!-- Step 4: Выдача -->
+        <div class="step-col">
+          <div class="step-num-circle">4</div>
+          <div class="step-icon-box">
+            <!-- Car Key & Handover SVG -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5833EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
+              <circle cx="7" cy="17" r="2"/>
+              <circle cx="17" cy="17" r="2"/>
+            </svg>
+          </div>
+          <h4 class="step-col-title">Выдача</h4>
+          <p class="step-col-desc">Передаём чистый автомобиль с документами прямо в вашем городе</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Solid Unified Bottom CTA Banner (No blurry crops, clean luxury aesthetic) -->
+  <section class="bottom-banner-section">
+    <div class="container">
+      <div class="solid-banner-card">
+        <div class="solid-banner-accents" aria-hidden="true">
+          <svg width="44" height="26" viewBox="0 0 44 26" fill="none">
+            <path d="M16 4L30 22M28 4L42 22" stroke="#5833EA" stroke-width="3.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <div class="solid-banner-content">
+          <span class="solid-banner-kicker">Готовы начать?</span>
+          <h2 class="solid-banner-title">Оставьте заявку прямо сейчас</h2>
+          <p class="solid-banner-sub">
+            Наш менеджер свяжется с вами в течение 15 минут, подробно ответит на все вопросы и подготовит подборку из 3 реальных проверенных лотов с аукционов Encar
+          </p>
+
+          <div class="solid-banner-actions">
+            <button type="button" class="btn-banner-cta" id="bannerCtaBtn">
+              <span>Оставить заявку на подбор</span>
+              <span class="arrow-right">→</span>
+            </button>
+          </div>
+
+          <div class="solid-banner-trust-tags">
+            <div class="banner-trust-tag">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5833EA" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span>Официальный договор и фиксированная цена</span>
+            </div>
+            <div class="banner-trust-tag">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5833EA" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              <span>Полная проверка истории Encar / CarFax</span>
+            </div>
+            <div class="banner-trust-tag">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5833EA" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>Доставка от 14 дней до вашего города</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Site Footer with 152-FZ Legal Compliance -->
+  <footer class="main-footer" id="faq">
+    <div class="container footer-container">
+      <div class="footer-top-row">
+        <!-- Logo -->
+        <div class="footer-brand">
+          <div class="brand-logo">
+            <svg class="logo-svg" width="34" height="26" viewBox="0 0 40 28" fill="none">
+              <path d="M4 22C10 14 18 6 36 6M8 24C16 16 26 12 38 12" stroke="#111827" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M2 24C6 24 10 22 14 18" stroke="#5833EA" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+            <div class="logo-text">
+              <span class="logo-main">AutoKorea</span>
+              <span class="logo-sub">Авто из Кореи и Китая под ключ</span>
+            </div>
+          </div>
+          <p class="footer-brand-desc">Прямой импорт автомобилей с аукционов Южной Кореи и Китая. Таможенное оформление во Владивостоке и Москве.</p>
+        </div>
+
+        <!-- Nav -->
+        <div class="footer-nav">
+          <a href="#features">Преимущества</a>
+          <a href="#calculator">Калькулятор</a>
+          <a href="#process">Как мы работаем</a>
+          <a href="#" id="openPrivacyFooterLink">Политика конфиденциальности</a>
+        </div>
+
+        <!-- Contacts -->
+        <div class="footer-contacts">
+          <div class="footer-phone-wrap">
+            <a href="tel:+78005553535" class="footer-phone">+7 (800) 555-35-35</a>
+            <span class="footer-schedule">Ежедневно 9:00 - 21:00 МСК</span>
+          </div>
+          <div class="footer-socials">
+            <a href="https://t.me/" target="_blank" rel="noopener" class="social-btn" title="Telegram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+            </a>
+            <a href="https://wa.me/" target="_blank" rel="noopener" class="social-btn" title="WhatsApp">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.41a8.17 8.17 0 012.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.19 8.19 0 01-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.56-1.34-.76-1.84-.2-.49-.4-.42-.56-.43h-.47c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.12.17 1.77 2.7 4.29 3.79.6.26 1.07.41 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.23-.17-.48-.3z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Compliance Bottom Note (152-FZ & Civil Code 437) -->
+      <div class="footer-legal-row">
+        <p class="footer-disclaimer">
+          Информация на сайте носит исключительно ознакомительный характер и ни при каких условиях не является публичной офертой, определяемой положениями Статьи 437(2) Гражданского кодекса РФ. Окончательная стоимость и условия фиксируются в официальном договоре поручения. Все персональные данные обрабатываются строго в соответствии с Федеральным законом «О персональных данных» № 152-ФЗ.
+        </p>
+        <div class="footer-copy-wrap">
+          <span>© 2026 AutoKorea. Все права защищены.</span>
+          <a href="#" id="openPrivacyBottomLink" class="legal-link">Политика обработки персональных данных</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lead Capture Modal (152-FZ Compliant) -->
+  <div class="modal-overlay" id="leadModal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <button type="button" class="modal-close" id="modalCloseBtn" aria-label="Закрыть модальное окно">&times;</button>
+      
+      <!-- Lead Form View -->
+      <div id="modalFormView">
+        <span class="modal-tag">ЗАЯВКА НА ПОДБОР И РАСЧЕТ</span>
+        <h3 class="modal-title" id="modalTitle">Получить точный расчет под ключ</h3>
+        <p class="modal-subtitle">Менеджер проверит наличие лотов на аукционах Encar, актуальные ставки таможни ФТС и свяжется с вами.</p>
+
+        <div class="modal-summary-box" id="modalSummaryBox">
+          🇰🇷 Hyundai Avante 2021 • 2 850 000 ₽ под ключ
+        </div>
+
+        <form id="leadForm" class="modal-form" novalidate>
+          <div class="form-group">
+            <label for="userName" class="field-label">Ваше имя</label>
+            <input type="text" id="userName" class="form-input" placeholder="Например, Александр" maxlength="50" required>
+          </div>
+
+          <div class="form-group">
+            <label for="userPhone" class="field-label">Телефон или WhatsApp</label>
+            <input type="tel" id="userPhone" class="form-input" placeholder="+7 (999) 000-00-00" maxlength="20" required>
+          </div>
+
+          <div class="form-group">
+            <label for="userTg" class="field-label">Telegram или пожелания к авто (бюджет, цвет)</label>
+            <input type="text" id="userTg" class="form-input" placeholder="@username или желаемый бюджет" maxlength="80">
+          </div>
+
+          <!-- 152-FZ Legal Consent -->
+          <div class="consent-group">
+            <label class="consent-label">
+              <input type="checkbox" id="consentCheck" checked required>
+              <span>Согласен на обработку персональных данных в соответствии с <a href="#" id="openPrivacyFromModal">152-ФЗ</a> и принимаю условия <a href="#" id="openPrivacyFromModal2">Политики</a></span>
+            </label>
+          </div>
+
+          <div class="modal-error-msg" id="modalError" style="display: none;"></div>
+
+          <button type="submit" class="btn-modal-submit" id="modalSubmitBtn">
+            <span>Отправить заявку менеджеру</span>
+            <span class="btn-arrow">→</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Success Screen -->
+      <div id="modalSuccessView" style="display: none;" class="modal-success">
+        <div class="success-icon-box">✓</div>
+        <h3 class="success-title">Заявка успешно принята!</h3>
+        <p class="success-p">Менеджер уже готовит подборку лотов с аукционов. Мы свяжемся с вами в течение 15 минут в Telegram/WhatsApp.</p>
+        <button type="button" class="btn-purple-sm" id="successCloseBtn">Отлично, закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy Policy Modal (152-FZ Full Legal Text) -->
+  <div class="modal-overlay" id="privacyModal" style="display: none;" role="dialog" aria-modal="true">
+    <div class="modal-card modal-card-privacy">
+      <button type="button" class="modal-close" id="privacyCloseBtn" aria-label="Закрыть">&times;</button>
+      <div class="privacy-content">
+        <h3 class="privacy-title">Политика обработки персональных данных (152-ФЗ)</h3>
+        <div class="privacy-text-scroll">
+          <p><strong>1. Общие положения</strong><br>
+          Настоящая Политика обработки персональных данных составлена в соответствии с требованиями Федерального закона от 27.07.2006 № 152-ФЗ «О персональных данных» и определяет порядок сбора, обработки и обеспечения безопасности персональных данных сервисом AutoKorea (далее — Оператор).</p>
+          
+          <p><strong>2. Состав собираемых данных</strong><br>
+          Оператор обрабатывает следующие категории данных, добровольно предоставляемые Пользователем через формы на сайте: имя, контактный номер телефона, идентификатор в мессенджере Telegram/WhatsApp, город доставки и параметры запрашиваемого транспортного средства.</p>
+
+          <p><strong>3. Цели обработки персональных данных</strong><br>
+          Данные используются исключительно в целях: предоставления консультаций по расчету таможенных платежей, подбора лотов на зарубежных автоаукционах, подготовки индивидуального коммерческого предложения и заключения договора поручения на пригон ТС.</p>
+
+          <p><strong>4. Безопасность и конфиденциальность</strong><br>
+          Оператор обязуется не передавать полученные персональные данные третьим лицам без согласия субъекта, за исключением случаев, предусмотренных действующим законодательством РФ. Все данные передаются по защищенному протоколу SSL/TLS.</p>
+
+          <p><strong>5. Права субъекта персональных данных</strong><br>
+          Пользователь имеет право в любой момент запросить уточнение, блокирование или уничтожение своих персональных данных путем направления письменного заявления по адресу электронной почты либо через обращение к менеджеру.</p>
+
+          <p><strong>6. Срок обработки данных</strong><br>
+          Обработка персональных данных осуществляется до достижения целей обработки либо до момента отзыва согласия субъектом персональных данных.</p>
+        </div>
+        <button type="button" class="btn-purple-sm" id="privacyAgreeBtn" style="margin-top: 16px; width: 100%;">Понятно, закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cookie Compliance Bar -->
+  <aside class="cookie-bar" id="cookieBar">
+    <div class="cookie-inner">
+      <span>🍪 Мы используем cookies и технические данные для стабильной работы калькулятора. Оставаясь на сайте, вы соглашаетесь с условиями.</span>
+      <button type="button" class="btn-cookie-accept" id="cookieAcceptBtn">Принять</button>
+    </div>
+  </aside>
+
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
