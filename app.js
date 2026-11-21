@@ -395,7 +395,10 @@ function setupModals() {
   const modalError = document.getElementById('modalError');
   const submitBtn = document.getElementById('modalSubmitBtn');
   
+  let modalOpenedAt = 0;
+
   function openLeadModalWithData() {
+    modalOpenedAt = Date.now();
     if (modalSummaryBox) {
       const flag = currentCountry === 'korea' ? '🇰🇷' : '🇨🇳';
       if (isCustomCar || currentBrand === 'other') {
@@ -446,7 +449,48 @@ function setupModals() {
     if (e.target === privacyModal) closePrivacy();
   });
   
-  // Submit handler with 152-FZ verification
+  // Interactive Phone Mask: +7 (___) ___-__-__
+  const phoneInput = document.getElementById('userPhone');
+  if (phoneInput) {
+    function formatPhone(val) {
+      let digits = val.replace(/\D/g, '');
+      if (digits.startsWith('7') || digits.startsWith('8')) {
+        digits = digits.substring(1);
+      }
+      digits = digits.substring(0, 10);
+      let res = '+7';
+      if (digits.length > 0) res += ' (' + digits.substring(0, 3);
+      if (digits.length >= 4) res += ') ' + digits.substring(3, 6);
+      if (digits.length >= 7) res += '-' + digits.substring(6, 8);
+      if (digits.length >= 9) res += '-' + digits.substring(8, 10);
+      return res;
+    }
+
+    phoneInput.addEventListener('focus', () => {
+      if (!phoneInput.value.trim()) {
+        phoneInput.value = '+7 (';
+      }
+    });
+
+    phoneInput.addEventListener('blur', () => {
+      if (phoneInput.value.trim() === '+7 (' || phoneInput.value.trim() === '+7') {
+        phoneInput.value = '';
+      }
+    });
+
+    phoneInput.addEventListener('input', () => {
+      phoneInput.value = formatPhone(phoneInput.value);
+    });
+
+    phoneInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && phoneInput.value.length <= 4) {
+        e.preventDefault();
+        phoneInput.value = '';
+      }
+    });
+  }
+  
+  // Submit handler with 152-FZ verification, Anti-Spam Honeypot, Speed-Gate & Cooldown
   if (leadForm) {
     leadForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -455,7 +499,9 @@ function setupModals() {
       const phone = document.getElementById('userPhone')?.value.trim();
       const tgOrCity = document.getElementById('userTg')?.value.trim() || 'Не указан';
       const consent = document.getElementById('consentCheck')?.checked;
+      const hpField = document.getElementById('userWebsiteHp');
       
+      // 1. Basic validation
       if (!name || !phone) {
         if (modalError) {
           modalError.textContent = 'Пожалуйста, укажите имя и телефон для связи';
@@ -463,12 +509,55 @@ function setupModals() {
         }
         return;
       }
+
+      // 2. Phone mask completeness check (+7 (XXX) XXX-XX-XX requires 11 digits)
+      const rawDigits = phone.replace(/\D/g, '');
+      if (rawDigits.length < 11) {
+        if (modalError) {
+          modalError.textContent = 'Введите корректный номер телефона: +7 (XXX) XXX-XX-XX';
+          modalError.style.display = 'block';
+        }
+        return;
+      }
       
+      // 3. 152-FZ Consent verification
       if (!consent) {
         if (modalError) {
           modalError.textContent = 'Необходимо согласие на обработку персональных данных (152-ФЗ)';
           modalError.style.display = 'block';
         }
+        return;
+      }
+
+      // 4. Client-side Anti-Flood Cooldown (60 seconds)
+      const lastSentTs = parseInt(localStorage.getItem('lead_last_sent_ts') || '0', 10);
+      const now = Date.now();
+      if (now - lastSentTs < 60000) {
+        const remainingSec = Math.ceil((60000 - (now - lastSentTs)) / 1000);
+        if (modalError) {
+          modalError.textContent = `Заявка уже отправлена! Менеджер скоро свяжется с вами. Повторный запрос через ${remainingSec} сек.`;
+          modalError.style.display = 'block';
+        }
+        return;
+      }
+
+      // 5. Anti-Spam: Honeypot & Speed-Gate Check
+      const isHpSpam = hpField && hpField.value.trim().length > 0;
+      const fillDuration = now - modalOpenedAt;
+      const isTooFast = modalOpenedAt > 0 && fillDuration < 1200; // scripts submit in < 1.2s
+
+      if (isHpSpam || isTooFast) {
+        // Silently mock success to trap competitor bots / scrapers
+        console.warn('Bot detected by defense matrix. Silently discarding submission.');
+        setTimeout(() => {
+          if (modalFormView) modalFormView.style.display = 'none';
+          if (modalSuccessView) modalSuccessView.style.display = 'block';
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span>Отправить заявку менеджеру</span><span class="btn-arrow">→</span>';
+          }
+          leadForm.reset();
+        }, 300);
         return;
       }
       
@@ -480,19 +569,43 @@ function setupModals() {
       }
       
       let carStr = isCustomCar || currentBrand === 'other' ? 'Индивидуальный подбор' : `${currentBrand} ${currentModelData.model}`;
-      let priceStr = isCustomCar || currentBrand === 'other' ? 'Под бюджет' : formatPrice(calculateCustoms(currentModelData.basePrice, selectedYear).total);
+      const calc = (currentModelData && !isCustomCar && currentBrand !== 'other')
+        ? calculateCustoms(currentModelData.basePrice, selectedYear)
+        : { total: 0, customs: 0 };
       
+      let priceStr = isCustomCar || currentBrand === 'other' ? 'Под бюджет' : formatPrice(calc.total);
+      const totalNum = calc.total || 0;
+      const dutyNum = calc.customs || 0;
+      
+      // Dual-compatible payload (works with both worker structures)
       const payload = {
-        name,
+        client: {
+          name: name,
+          phone: phone,
+          contact: tgOrCity
+        },
+        order: {
+          car: carStr,
+          country: currentCountry === 'korea' ? 'Южная Корея' : 'Китай',
+          grandTotalRub: totalNum,
+          savingsRub: Math.round(totalNum * 0.15),
+          customsDutyRub: dutyNum
+        },
+        name: name,
         contact: phone,
         city: tgOrCity,
         car: carStr,
         year: selectedYear,
         price: priceStr,
         country: currentCountry === 'korea' ? 'Южная Корея' : 'Китай',
+        user_website_hp: hpField ? hpField.value : '',
+        fill_time_ms: fillDuration,
         timestamp: new Date().toISOString()
       };
       
+      // Record successful send timestamp for cooldown
+      localStorage.setItem('lead_last_sent_ts', Date.now().toString());
+
       // Dispatch in background to Cloudflare Worker
       fetch(CF_WORKER_URL, {
         method: 'POST',
