@@ -25,7 +25,7 @@
           <path d="M2 24C6 24 10 22 14 18" stroke="#5833EA" stroke-width="2.5" stroke-linecap="round"/>
         </svg>
         <div class="logo-text">
-          <span class="logo-main">AutoKorea</span>
+          <span class="logo-main brand-name-dynamic">AutoKorea</span>
           <span class="logo-sub">Авто из Кореи и Китая</span>
         </div>
       </a>
@@ -41,12 +41,16 @@
       <!-- Header Contacts & CTA -->
       <div class="header-right">
         <div class="phone-block">
-          <a href="tel:+78005553535" class="phone-number">
+          <a href="tel:+78005553535" class="phone-number phone-dynamic-link">
             <svg class="phone-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24 11.72 11.72 0 003.68.59 1 1 0 011 1v3.5a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.72 11.72 0 00.59 3.68 1 1 0 01-.24 1.02l-2.23 2.09z"/></svg>
-            +7 (800) 555-35-35
+            <span class="phone-text-dynamic">+7 (800) 555-35-35</span>
           </a>
           <span class="phone-schedule">Пн-Вс 9:00-21:00 (МСК)</span>
         </div>
+        <a href="https://t.me/" target="_blank" rel="noopener" class="header-tg-pill tg-dynamic-link" id="headerTgPill" style="display: none;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+          <span id="headerTgUsername">Telegram</span>
+        </a>
         <button type="button" class="btn-purple-sm" id="headerCtaBtn">Оставить заявку</button>
       </div>
     </div>
@@ -59,9 +63,9 @@
         <h1 class="hero-title">
           Автомобили<br>
           из Кореи и Китая<br>
-          <span class="text-purple">под ключ</span>
+          <span class="text-purple" id="heroBrandSuffix">под ключ</span>
         </h1>
-        <p class="hero-subtitle">Быстро. Выгодно. Надёжно.</p>
+        <p class="hero-subtitle">Быстро. Выгодно. Надёжно с гарантией по договору.</p>
         <button type="button" class="btn-purple-lg" id="scrollCalcBtn">
           <span>Рассчитать стоимость</span>
           <span class="arrow-down">↓</span>
@@ -142,16 +146,31 @@
   <!-- Interactive Calculator Section -->
   <section class="calc-section" id="calculator">
     <div class="container">
+
+      <!-- Live CBR Exchange Rates Ticker Bar -->
+      <div class="cbr-rate-ticker" id="cbrRateTicker">
+        <div class="cbr-ticker-left">
+          <span class="cbr-pulse-dot"></span>
+          <span class="cbr-ticker-title">Курсы валют ЦБ РФ:</span>
+        </div>
+        <div class="cbr-ticker-rates">
+          <span class="cbr-chip">🇰🇷 1 000 ₩ = <strong id="cbrKrw">68.50</strong> ₽</span>
+          <span class="cbr-chip">🇪🇺 1 € = <strong id="cbrEur">104.50</strong> ₽</span>
+          <span class="cbr-chip">🇺🇸 1 $ = <strong id="cbrUsd">97.20</strong> ₽</span>
+          <span class="cbr-chip">🇨🇳 1 ¥ = <strong id="cbrCny">13.40</strong> ₽</span>
+        </div>
+        <span class="cbr-ticker-badge" id="cbrStatusBadge">Онлайн расчет</span>
+      </div>
+
       <div class="calc-layout-grid">
         
         <!-- Calculator Left Header -->
         <div class="calc-intro">
           <span class="calc-eyebrow">Калькулятор</span>
           <h2 class="calc-heading">
-            Рассчитайте<br>
-            стоимость автомобиля
+            Рассчитайте стоимость автомобиля
           </h2>
-          <p class="calc-subtext">Укажите параметры — и узнайте точную стоимость с доставкой и растаможкой</p>
+          <p class="calc-subtext">Укажите параметры или вбейте данные с Encar — получите точную смету под ключ по правилам ФТС 2026</p>
           <div class="curved-arrow-box" aria-hidden="true">
             <svg width="70" height="45" viewBox="0 0 80 50" fill="none" stroke="#111827" stroke-width="1.8" stroke-linecap="round">
               <path d="M10 10 Q 50 12 60 40 M52 35 L60 40 L64 30"/>
@@ -163,25 +182,35 @@
         <div class="calc-form-card">
           <form id="calcForm" class="calc-form-body">
             
-            <!-- Row 1: Country Toggle with Crisp SVG Flags -->
-            <div class="form-row">
-              <label class="form-row-label">Страна</label>
+            <!-- Mode Switcher: Catalog vs Free Encar Calculator -->
+            <div class="calc-mode-nav">
+              <button type="button" class="calc-mode-tab active" id="tabModeCatalog">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <span>Каталог авто</span>
+              </button>
+              <button type="button" class="calc-mode-tab" id="tabModeEncar">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                <span>Расчет Encar</span>
+              </button>
+            </div>
+
+            <!-- Country Selection Group -->
+            <div class="calc-field-group">
+              <label class="calc-field-label">Страна импорта</label>
               <div class="country-toggles">
                 <button type="button" class="country-toggle-btn active" data-country="korea" id="btnCountryKorea">
                   <!-- Korea Flag SVG -->
                   <svg class="flag-svg" width="22" height="16" viewBox="0 0 30 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect width="30" height="20" rx="2" fill="#FFFFFF" stroke="#E5E7EB"/>
-                    <!-- Red / Blue Taegeuk circle -->
                     <circle cx="15" cy="10" r="4.5" fill="#C60C30"/>
                     <path d="M15 5.5C17.5 5.5 17.5 10 15 10C12.5 10 12.5 14.5 15 14.5C12.5 14.5 10.5 12.5 10.5 10C10.5 7.5 12.5 5.5 15 5.5Z" fill="#003478"/>
                     <circle cx="15" cy="12.25" r="2.25" fill="#003478"/>
-                    <!-- Trigrams -->
                     <line x1="6" y1="5" x2="8" y2="7" stroke="#111827" stroke-width="1"/>
                     <line x1="7" y1="4" x2="9" y2="6" stroke="#111827" stroke-width="1"/>
                     <line x1="22" y1="5" x2="24" y2="7" stroke="#111827" stroke-width="1"/>
                     <line x1="21" y1="14" x2="23" y2="16" stroke="#111827" stroke-width="1"/>
                   </svg>
-                  <span>Корея</span>
+                  <span>Южная Корея</span>
                 </button>
 
                 <button type="button" class="country-toggle-btn" data-country="china" id="btnCountryChina">
@@ -198,41 +227,97 @@
               </div>
             </div>
 
-            <!-- Row 2: Brand Dropdown -->
-            <div class="form-row">
-              <label for="selectBrand" class="form-row-label">Марка</label>
-              <div class="select-wrapper">
-                <select id="selectBrand" class="custom-select">
-                  <!-- Populated by JS -->
-                </select>
-                <span class="select-arrow">⌄</span>
+            <!-- Mode 1: Catalog Dropdowns -->
+            <div id="catalogFieldsWrap" class="calc-fields-stack">
+              <div class="calc-field-group">
+                <label for="selectBrand" class="calc-field-label">Марка автомобиля</label>
+                <div class="select-wrapper">
+                  <select id="selectBrand" class="custom-select"></select>
+                  <span class="select-arrow">⌄</span>
+                </div>
+              </div>
+
+              <div class="calc-field-group">
+                <label for="selectModel" class="calc-field-label">Модель и комплектация</label>
+                <div class="select-wrapper">
+                  <select id="selectModel" class="custom-select"></select>
+                  <span class="select-arrow">⌄</span>
+                </div>
+              </div>
+
+              <div class="calc-field-group">
+                <label for="selectYear" class="calc-field-label">Год выпуска (Тариф ФТС)</label>
+                <div class="select-wrapper">
+                  <select id="selectYear" class="custom-select">
+                    <option value="2021" selected>2021 год (3–5 лет, проходной • ставка за см³)</option>
+                    <option value="2022">2022 год (3–5 лет, проходной • ставка за см³)</option>
+                    <option value="2023">2023 год (3–5 лет, проходной • ставка за см³)</option>
+                    <option value="2024">2024 год (до 3 лет, свежий • 48% пошлина)</option>
+                    <option value="2025">2025 год (новый • 48% пошлина)</option>
+                    <option value="2020">2020 год (старше 5 лет, повышенная ставка)</option>
+                    <option value="2019">2019 год (старше 5 лет, повышенная ставка)</option>
+                  </select>
+                  <span class="select-arrow">⌄</span>
+                </div>
               </div>
             </div>
 
-            <!-- Row 3: Model Dropdown -->
-            <div class="form-row">
-              <label for="selectModel" class="form-row-label">Модель</label>
-              <div class="select-wrapper">
-                <select id="selectModel" class="custom-select">
-                  <!-- Populated by JS -->
-                </select>
-                <span class="select-arrow">⌄</span>
+            <!-- Mode 2: Free Encar / Custom Lot Input -->
+            <div id="encarFieldsWrap" class="calc-fields-stack" style="display: none;">
+              <!-- Price input in WON / YUAN -->
+              <div class="calc-field-group">
+                <div class="calc-field-header">
+                  <label for="encarPriceInput" class="calc-field-label" id="lblEncarPrice">Цена на Encar</label>
+                  <span class="calc-field-hint" id="encarCurrencyHint">в вонах (₩)</span>
+                </div>
+                <div class="input-with-currency">
+                  <input type="number" id="encarPriceInput" class="custom-input" placeholder="24500000" value="24500000" step="500000">
+                  <span class="currency-tag" id="encarCurrencyTag">₩ (воны)</span>
+                </div>
+                <div class="quick-chips-row">
+                  <button type="button" class="quick-chip-btn" data-price="18500000">18.5 млн ₩</button>
+                  <button type="button" class="quick-chip-btn" data-price="24500000">24.5 млн ₩</button>
+                  <button type="button" class="quick-chip-btn" data-price="32000000">32 млн ₩</button>
+                  <button type="button" class="quick-chip-btn" data-price="54000000">54 млн ₩</button>
+                </div>
               </div>
-            </div>
 
-            <!-- Row 4: Year Dropdown (Affects FTS Customs Duty & Tariffs) -->
-            <div class="form-row">
-              <label for="selectYear" class="form-row-label">Год выпуска</label>
-              <div class="select-wrapper">
-                <select id="selectYear" class="custom-select">
-                  <option value="2021" selected>2021 год (3-5 лет, льготный тариф ФТС)</option>
-                  <option value="2022">2022 год (3-5 лет, проходной)</option>
-                  <option value="2023">2023 год (до 3 лет, свежий / 48% пошлина)</option>
-                  <option value="2024">2024 год (новый / 48% пошлина)</option>
-                  <option value="2020">2020 год (старше 5 лет, повышенная ставка)</option>
-                  <option value="2019">2019 год (старше 5 лет, повышенная ставка)</option>
-                </select>
-                <span class="select-arrow">⌄</span>
+              <!-- Engine Volume in CC -->
+              <div class="calc-field-group">
+                <div class="calc-field-header">
+                  <label for="encarEngineCcInput" class="calc-field-label">Объем двигателя</label>
+                  <span class="calc-field-hint">в см³ (по сетке ФТС)</span>
+                </div>
+                <div class="input-with-currency">
+                  <input type="number" id="encarEngineCcInput" class="custom-input" placeholder="1999" value="1999" step="100">
+                  <span class="currency-tag">см³</span>
+                </div>
+                <div class="quick-chips-row">
+                  <button type="button" class="quick-chip-btn" data-cc="1598">1.6 л</button>
+                  <button type="button" class="quick-chip-btn" data-cc="1999">2.0 л</button>
+                  <button type="button" class="quick-chip-btn" data-cc="2151">2.2 л Дизель</button>
+                  <button type="button" class="quick-chip-btn" data-cc="2497">2.5 л Turbo</button>
+                  <button type="button" class="quick-chip-btn" data-cc="2993">3.0 л</button>
+                </div>
+              </div>
+
+              <!-- Age Category -->
+              <div class="calc-field-group">
+                <label for="encarAgeSelect" class="calc-field-label">Возраст авто (Тариф растаможки)</label>
+                <div class="select-wrapper">
+                  <select id="encarAgeSelect" class="custom-select">
+                    <option value="3_to_5" selected>3–5 лет (2021–2023) — Проходной (по объему в €/см³)</option>
+                    <option value="under_3">до 3 лет (2024–2026) — Свежий (48% от стоимости)</option>
+                    <option value="over_5">старше 5 лет (до 2021) — Непроходной (повышенная ставка)</option>
+                  </select>
+                  <span class="select-arrow">⌄</span>
+                </div>
+              </div>
+
+              <!-- Optional Lot Title or Encar Link -->
+              <div class="calc-field-group">
+                <label for="encarLotInput" class="calc-field-label">Ссылка на лот Encar или модель <span class="label-optional">(необязательно)</span></label>
+                <input type="text" id="encarLotInput" class="custom-input" placeholder="Например: Kia Carnival Signature или ссылка encar.com">
               </div>
             </div>
 
@@ -241,12 +326,6 @@
               Рассчитать стоимость
             </button>
           </form>
-
-          <!-- Showcase Visual Right of Form -->
-          <div class="calc-side-visual">
-            <div class="calc-visual-backdrop"></div>
-            <img src="img/calc_cars.png" alt="Премиальные автомобили в студии" class="calc-side-img">
-          </div>
         </div>
       </div>
 
@@ -289,28 +368,35 @@
           <div class="drawer-rows">
             <div class="drawer-row">
               <span>Стоимость автомобиля на аукционе:</span>
-              <strong id="detailCarCost">1 750 000 ₽</strong>
+              <strong id="detailCarCost">1 750 000 ₽ <span class="sub-cost-tag" id="detailForeignPrice">(24 500 000 ₩)</span></strong>
             </div>
             <div class="drawer-row">
-              <span>Фрахт и логистика до РФ (Владивосток/Москва):</span>
-              <strong id="detailFreight">220 000 ₽</strong>
+              <span>Расходы в стране отправления и фрахт во Владивосток:</span>
+              <strong id="detailFreight">209 670 ₽</strong>
             </div>
             <div class="drawer-row">
-              <span>Таможенная пошлина ФТС РФ (<span id="detailDutyTag">льготный тариф 3-5 лет</span>):</span>
-              <strong id="detailDuty">445 000 ₽</strong>
+              <span>Таможенная пошлина ФТС РФ (<span id="detailDutyTag">3–5 лет, проходной • по объему</span>):</span>
+              <strong id="detailDuty">564 000 ₽ <span class="sub-cost-tag" id="detailDutyFormula"></span></strong>
             </div>
             <div class="drawer-row">
-              <span>Утилизационный сбор РФ (льготный для физлиц):</span>
+              <span>Таможенный сбор за оформление (ФТС):</span>
+              <strong id="detailCustomsFee">8 530 ₽</strong>
+            </div>
+            <div class="drawer-row">
+              <span>Утилизационный сбор РФ (для личного пользования физлиц):</span>
               <strong id="detailUtil">5 200 ₽</strong>
             </div>
             <div class="drawer-row">
               <span>СБКТС, ЭПТС, услуги таможенного брокера и лаборатория:</span>
-              <strong>95 000 ₽</strong>
+              <strong id="detailPaperwork">95 000 ₽</strong>
             </div>
             <div class="drawer-row">
               <span>Комиссия компании (подбор, сопровождение, безопасная сделка):</span>
-              <strong id="detailCommission">124 800 ₽</strong>
+              <strong id="detailCommission">120 000 ₽</strong>
             </div>
+          </div>
+          <div class="drawer-formula-note" id="drawerFormulaNote">
+            💡 <em>Справка для подборщиков:</em> пошлина для проходных авто 3–5 лет рассчитывается строго в евро за 1 см³ объема двигателя (Решение ЕЭК № 107), а не 48% (48% применяется для авто до 3 лет). Курсы валют подтягиваются с ЦБ РФ в реальном времени.
           </div>
         </div>
       </div>
@@ -452,7 +538,7 @@
               <path d="M2 24C6 24 10 22 14 18" stroke="#5833EA" stroke-width="2.5" stroke-linecap="round"/>
             </svg>
             <div class="logo-text">
-              <span class="logo-main">AutoKorea</span>
+              <span class="logo-main brand-name-dynamic">AutoKorea</span>
               <span class="logo-sub">Авто из Кореи и Китая под ключ</span>
             </div>
           </div>
@@ -470,14 +556,14 @@
         <!-- Contacts -->
         <div class="footer-contacts">
           <div class="footer-phone-wrap">
-            <a href="tel:+78005553535" class="footer-phone">+7 (800) 555-35-35</a>
+            <a href="tel:+78005553535" class="footer-phone phone-dynamic-link"><span class="phone-text-dynamic">+7 (800) 555-35-35</span></a>
             <span class="footer-schedule">Ежедневно 9:00 - 21:00 МСК</span>
           </div>
           <div class="footer-socials">
-            <a href="https://t.me/" target="_blank" rel="noopener" class="social-btn" title="Telegram">
+            <a href="https://t.me/" target="_blank" rel="noopener" class="social-btn tg-dynamic-link" id="footerTgBtn" title="Telegram">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
             </a>
-            <a href="https://wa.me/" target="_blank" rel="noopener" class="social-btn" title="WhatsApp">
+            <a href="https://wa.me/" target="_blank" rel="noopener" class="social-btn phone-dynamic-link" title="WhatsApp">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.41a8.17 8.17 0 012.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.19 8.19 0 01-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.56-1.34-.76-1.84-.2-.49-.4-.42-.56-.43h-.47c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.12.17 1.77 2.7 4.29 3.79.6.26 1.07.41 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.23-.17-.48-.3z"/></svg>
             </a>
           </div>
@@ -490,7 +576,7 @@
           Информация на сайте носит исключительно ознакомительный характер и ни при каких условиях не является публичной офертой, определяемой положениями Статьи 437(2) Гражданского кодекса РФ. Окончательная стоимость и условия фиксируются в официальном договоре поручения. Все персональные данные обрабатываются строго в соответствии с Федеральным законом «О персональных данных» № 152-ФЗ.
         </p>
         <div class="footer-copy-wrap">
-          <span>© 2026 AutoKorea. Все права защищены.</span>
+          <span>© 2026 <span class="brand-name-dynamic">AutoKorea</span>. Все права защищены.</span>
           <a href="#" id="openPrivacyBottomLink" class="legal-link">Политика обработки персональных данных</a>
         </div>
       </div>
@@ -506,21 +592,27 @@
       <div id="modalFormView">
         <span class="modal-tag">ЗАЯВКА НА ПОДБОР И РАСЧЕТ</span>
         <h3 class="modal-title" id="modalTitle">Получить точный расчет под ключ</h3>
-        <p class="modal-subtitle">Менеджер проверит наличие лотов на аукционах Encar, актуальные ставки таможни ФТС и свяжется с вами.</p>
+        <p class="modal-subtitle">Менеджер <span class="brand-name-dynamic">AutoKorea</span> проверит наличие лотов на аукционах Encar, актуальные ставки таможни ФТС и свяжется с вами.</p>
 
         <div class="modal-summary-box" id="modalSummaryBox">
           🇰🇷 Hyundai Avante 2021 • 2 850 000 ₽ под ключ
         </div>
 
         <form id="leadForm" class="modal-form" novalidate>
+          <!-- Anti-Spam Honeypot (hidden from real users, traps bots) -->
+          <div class="hp-wrap" style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;" aria-hidden="true">
+            <label for="userWebsiteHp">Веб-сайт</label>
+            <input type="text" id="userWebsiteHp" name="user_website_hp" tabindex="-1" autocomplete="off">
+          </div>
+
           <div class="form-group">
             <label for="userName" class="field-label">Ваше имя</label>
             <input type="text" id="userName" class="form-input" placeholder="Например, Александр" maxlength="50" required>
           </div>
 
           <div class="form-group">
-            <label for="userPhone" class="field-label">Телефон или WhatsApp</label>
-            <input type="tel" id="userPhone" class="form-input" placeholder="+7 (999) 000-00-00" maxlength="20" required>
+            <label for="userPhone" class="field-label">Номер телефона</label>
+            <input type="tel" id="userPhone" class="form-input" placeholder="+7 (___) ___-__-__" maxlength="18" required>
           </div>
 
           <div class="form-group">
@@ -528,11 +620,11 @@
             <input type="text" id="userTg" class="form-input" placeholder="@username или желаемый бюджет" maxlength="80">
           </div>
 
-          <!-- 152-FZ Legal Consent -->
+          <!-- 152-FZ Legal Consent (Unchecked by default to prevent RKN fines) -->
           <div class="consent-group">
             <label class="consent-label">
-              <input type="checkbox" id="consentCheck" checked required>
-              <span>Согласен на обработку персональных данных в соответствии с <a href="#" id="openPrivacyFromModal">152-ФЗ</a> и принимаю условия <a href="#" id="openPrivacyFromModal2">Политики</a></span>
+              <input type="checkbox" id="consentCheck" required>
+              <span>Я даю согласие на обработку персональных данных в соответствии с <a href="#" id="openPrivacyFromModal">152-ФЗ</a> и принимаю условия <a href="#" id="openPrivacyFromModal2">Политики конфиденциальности</a></span>
             </label>
           </div>
 

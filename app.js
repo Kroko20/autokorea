@@ -1,136 +1,309 @@
 /**
  * AutoKorea 2026 - Master Application Engine
- * Accurate FTS Customs Tariff Engine (Korea KRW & China CNY)
- * Dynamic brand & model selector with real car photos
- * Age tariff calculator (3-5 years проходной vs <3 years 48% vs >5 years)
- * Custom / Other car individual selection flow
- * 152-FZ Legal Privacy Modal & Cookie consent
+ * Accurate FTS Customs Tariff Engine (Korea Encar KRW & China CNY)
+ * Live Central Bank of Russia (CBR) Exchange Rates API with Fallback
+ * Dynamic Free Encar Lot Calculator + Model Showcase Catalog
+ * URL Personalization Engine (?brand=...&tg=...&phone=...&country=...)
+ * 5-Layer Anti-Spam & Anti-Flood Defense Matrix
+ * 152-FZ Legal Privacy Compliance
  */
 
-// Exchange Rates (CBR / P2P Average)
+// Exchange Rates (Live CBR rates with institutional fallback)
 const RATES = {
-  KRW: 0.068,  // 1 ₩ = 0.068 ₽
-  CNY: 12.80,  // 1 ¥ = 12.80 ₽
-  EUR: 100.0,  // 1 € = 100.00 ₽
-  USD: 92.50   // 1 $ = 92.50 ₽
+  KRW: 0.0685, // 1 KRW = 0.0685 RUB (1 000 ₩ = 68.50 ₽)
+  CNY: 13.40,  // 1 CNY = 13.40 RUB
+  EUR: 104.50, // 1 EUR = 104.50 RUB
+  USD: 97.20   // 1 USD = 97.20 RUB
 };
 
-// Cloudflare Worker Endpoint
+// Cloudflare Worker Endpoint for Lead Processing
 const CF_WORKER_URL = 'https://shy-sun-dedf.odnovalov14.workers.dev';
 
-// Car Catalog with Dedicated High-Res Studio Photos
+// Car Catalog with Original Won (KRW) and Yuan (CNY) Prices + Engine Displacement
 const CAR_CATALOG = {
   korea: {
     brands: {
       'Hyundai': [
-        { model: 'Avante (Elantra)', baseYear: 2021, engine: '1.6 л • 123 л.с.', basePrice: 2850000, img: 'img/car_avante.png' },
-        { model: 'Sonata DN8', baseYear: 2021, engine: '2.0 л • 160 л.с.', basePrice: 3250000, img: 'img/car_avante.png' },
-        { model: 'Santa Fe TM', baseYear: 2021, engine: '2.5 л Turbo • 281 л.с.', basePrice: 4650000, img: 'img/car_genesis.png' },
-        { model: 'Palisade 3.8', baseYear: 2021, engine: '3.8 л • 295 л.с.', basePrice: 5400000, img: 'img/car_genesis.png' },
-        { model: 'Tucson NX4', baseYear: 2022, engine: '1.6 л Turbo • 180 л.с.', basePrice: 3750000, img: 'img/car_avante.png' }
+        { model: 'Avante (Elantra)', baseYear: 2021, engineDesc: '1.6 л • 123 л.с.', engineCc: 1598, priceForeign: 18500000, img: 'img/car_avante.png' },
+        { model: 'Sonata DN8', baseYear: 2021, engineDesc: '2.0 л • 160 л.с.', engineCc: 1999, priceForeign: 22500000, img: 'img/car_avante.png' },
+        { model: 'Santa Fe TM', baseYear: 2021, engineDesc: '2.5 л Turbo • 281 л.с.', engineCc: 2497, priceForeign: 28500000, img: 'img/car_genesis.png' },
+        { model: 'Palisade 3.8', baseYear: 2021, engineDesc: '3.8 л • 295 л.с.', engineCc: 3778, priceForeign: 33000000, img: 'img/car_genesis.png' },
+        { model: 'Tucson NX4', baseYear: 2022, engineDesc: '1.6 л Turbo • 180 л.с.', engineCc: 1598, priceForeign: 25000000, img: 'img/car_avante.png' }
       ],
       'Kia': [
-        { model: 'K5 DL3', baseYear: 2021, engine: '2.0 л • 160 л.с.', basePrice: 3180000, img: 'img/car_k5.png' },
-        { model: 'Sportage NQ5', baseYear: 2022, engine: '2.0 л Дизель • 186 л.с.', basePrice: 4050000, img: 'img/car_k5.png' },
-        { model: 'Sorento MQ4', baseYear: 2021, engine: '2.2 л Дизель • 199 л.с.', basePrice: 4750000, img: 'img/car_k5.png' },
-        { model: 'Carnival 4', baseYear: 2021, engine: '2.2 л Дизель • 199 л.с.', basePrice: 5100000, img: 'img/car_k5.png' }
+        { model: 'K5 DL3', baseYear: 2021, engineDesc: '2.0 л • 160 л.с.', engineCc: 1999, priceForeign: 21500000, img: 'img/car_k5.png' },
+        { model: 'Sportage NQ5', baseYear: 2022, engineDesc: '2.0 л Дизель • 186 л.с.', engineCc: 1998, priceForeign: 26500000, img: 'img/car_k5.png' },
+        { model: 'Sorento MQ4', baseYear: 2021, engineDesc: '2.2 л Дизель • 199 л.с.', engineCc: 2151, priceForeign: 31000000, img: 'img/car_k5.png' },
+        { model: 'Carnival 4', baseYear: 2021, engineDesc: '2.2 л Дизель • 199 л.с.', engineCc: 2151, priceForeign: 34000000, img: 'img/car_k5.png' }
       ],
       'Genesis': [
-        { model: 'GV80 2.5T AWD', baseYear: 2021, engine: '2.5 л Turbo • 304 л.с.', basePrice: 7400000, img: 'img/car_genesis.png' },
-        { model: 'G80 RG3', baseYear: 2021, engine: '2.5 л Turbo • 304 л.с.', basePrice: 6850000, img: 'img/car_genesis.png' },
-        { model: 'GV70 AWD', baseYear: 2022, engine: '2.5 л Turbo • 304 л.с.', basePrice: 6450000, img: 'img/car_genesis.png' },
-        { model: 'G70 2.0T', baseYear: 2021, engine: '2.0 л Turbo • 252 л.с.', basePrice: 4850000, img: 'img/car_genesis.png' }
+        { model: 'GV80 2.5T AWD', baseYear: 2021, engineDesc: '2.5 л Turbo • 304 л.с.', engineCc: 2497, priceForeign: 54000000, img: 'img/car_genesis.png' },
+        { model: 'G80 RG3', baseYear: 2021, engineDesc: '2.5 л Turbo • 304 л.с.', engineCc: 2497, priceForeign: 48000000, img: 'img/car_genesis.png' },
+        { model: 'GV70 AWD', baseYear: 2022, engineDesc: '2.5 л Turbo • 304 л.с.', engineCc: 2497, priceForeign: 45000000, img: 'img/car_genesis.png' },
+        { model: 'G70 2.0T', baseYear: 2021, engineDesc: '2.0 л Turbo • 252 л.с.', engineCc: 1998, priceForeign: 34000000, img: 'img/car_genesis.png' }
       ],
       'BMW': [
-        { model: '3 Series (G20) 320i', baseYear: 2021, engine: '2.0 л Turbo • 184 л.с.', basePrice: 4950000, img: 'img/hero_car.jpg' },
-        { model: '5 Series (G30) 520i', baseYear: 2021, engine: '2.0 л Turbo • 184 л.с.', basePrice: 5800000, img: 'img/hero_car.jpg' },
-        { model: 'X3 20d xDrive', baseYear: 2021, engine: '2.0 л Дизель • 190 л.с.', basePrice: 6100000, img: 'img/hero_car.jpg' },
-        { model: 'X5 30d xDrive', baseYear: 2021, engine: '3.0 л Дизель • 265 л.с.', basePrice: 9400000, img: 'img/hero_car.jpg' }
+        { model: '3 Series (G20) 320i', baseYear: 2021, engineDesc: '2.0 л Turbo • 184 л.с.', engineCc: 1998, priceForeign: 35000000, img: 'img/hero_car.jpg' },
+        { model: '5 Series (G30) 520i', baseYear: 2021, engineDesc: '2.0 л Turbo • 184 л.с.', engineCc: 1998, priceForeign: 42000000, img: 'img/hero_car.jpg' },
+        { model: 'X3 20d xDrive', baseYear: 2021, engineDesc: '2.0 л Дизель • 190 л.с.', engineCc: 1995, priceForeign: 44000000, img: 'img/hero_car.jpg' },
+        { model: 'X5 30d xDrive', baseYear: 2021, engineDesc: '3.0 л Дизель • 265 л.с.', engineCc: 2993, priceForeign: 68000000, img: 'img/hero_car.jpg' }
       ]
     }
   },
   china: {
     brands: {
       'Geely': [
-        { model: 'Monjaro 2.0 4WD', baseYear: 2023, engine: '2.0 л Turbo • 238 л.с.', basePrice: 3850000, img: 'img/car_monjaro.png' },
-        { model: 'Tugella 2.0 4WD', baseYear: 2022, engine: '2.0 л Turbo • 238 л.с.', basePrice: 3450000, img: 'img/car_monjaro.png' },
-        { model: 'Atlas Pro 1.5 4WD', baseYear: 2022, engine: '1.5 л Turbo • 177 л.с.', basePrice: 2750000, img: 'img/car_monjaro.png' }
+        { model: 'Monjaro 2.0 4WD', baseYear: 2023, engineDesc: '2.0 л Turbo • 238 л.с.', engineCc: 1969, priceForeign: 185000, img: 'img/car_monjaro.png' },
+        { model: 'Tugella 2.0 4WD', baseYear: 2022, engineDesc: '2.0 л Turbo • 238 л.с.', engineCc: 1969, priceForeign: 160000, img: 'img/car_monjaro.png' },
+        { model: 'Atlas Pro 1.5 4WD', baseYear: 2022, engineDesc: '1.5 л Turbo • 177 л.с.', engineCc: 1477, priceForeign: 125000, img: 'img/car_monjaro.png' }
       ],
       'Li Auto': [
-        { model: 'L7 Pro (EREV)', baseYear: 2023, engine: '1.5T Hybrid • 449 л.с.', basePrice: 6400000, img: 'img/car_l7.png' },
-        { model: 'L8 Max (EREV)', baseYear: 2023, engine: '1.5T Hybrid • 449 л.с.', basePrice: 7150000, img: 'img/car_l7.png' },
-        { model: 'L9 Ultra (EREV)', baseYear: 2023, engine: '1.5T Hybrid • 449 л.с.', basePrice: 8650000, img: 'img/car_l7.png' }
+        { model: 'L7 Pro (EREV)', baseYear: 2023, engineDesc: '1.5T Hybrid • 449 л.с.', engineCc: 1499, priceForeign: 315000, img: 'img/car_l7.png' },
+        { model: 'L8 Max (EREV)', baseYear: 2023, engineDesc: '1.5T Hybrid • 449 л.с.', engineCc: 1499, priceForeign: 355000, img: 'img/car_l7.png' },
+        { model: 'L9 Ultra (EREV)', baseYear: 2023, engineDesc: '1.5T Hybrid • 449 л.с.', engineCc: 1499, priceForeign: 435000, img: 'img/car_l7.png' }
       ],
       'Zeekr': [
-        { model: '001 You 100kWh', baseYear: 2023, engine: 'EV • 544 л.с. • 4WD', basePrice: 6100000, img: 'img/car_zeekr.png' },
-        { model: '007 4WD', baseYear: 2024, engine: 'EV • 646 л.с. • 4WD', basePrice: 5250000, img: 'img/car_zeekr.png' },
-        { model: 'X 4WD 5-seat', baseYear: 2023, engine: 'EV • 428 л.с. • 4WD', basePrice: 4200000, img: 'img/car_zeekr.png' }
+        { model: '001 You 100kWh', baseYear: 2023, engineDesc: 'EV • 544 л.с. • 4WD', engineCc: 0, priceForeign: 320000, img: 'img/car_zeekr.png' },
+        { model: '007 4WD', baseYear: 2024, engineDesc: 'EV • 646 л.с. • 4WD', engineCc: 0, priceForeign: 265000, img: 'img/car_zeekr.png' },
+        { model: 'X 4WD 5-seat', baseYear: 2023, engineDesc: 'EV • 428 л.с. • 4WD', engineCc: 0, priceForeign: 210000, img: 'img/car_zeekr.png' }
       ],
       'Changan': [
-        { model: 'CS55 Plus II', baseYear: 2022, engine: '1.5 л Turbo • 181 л.с.', basePrice: 2450000, img: 'img/car_monjaro.png' },
-        { model: 'UNI-K 2.0 AWD', baseYear: 2022, engine: '2.0 л Turbo • 226 л.с.', basePrice: 3550000, img: 'img/car_monjaro.png' }
+        { model: 'CS55 Plus II', baseYear: 2022, engineDesc: '1.5 л Turbo • 181 л.с.', engineCc: 1494, priceForeign: 115000, img: 'img/car_monjaro.png' },
+        { model: 'UNI-K 2.0 AWD', baseYear: 2022, engineDesc: '2.0 л Turbo • 226 л.с.', engineCc: 1998, priceForeign: 165000, img: 'img/car_monjaro.png' }
       ]
     }
   }
 };
 
-// Current Application State
+// Application State
 let currentCountry = 'korea';
 let currentBrand = 'Hyundai';
 let currentModelData = CAR_CATALOG.korea.brands['Hyundai'][0];
 let selectedYear = '2021';
+let calcMode = 'catalog'; // 'catalog' | 'encar'
+let customCalcData = {
+  priceForeign: 24500000,
+  engineCc: 1999,
+  ageCategory: '3_to_5',
+  lotTitle: ''
+};
 let isCustomCar = false;
+let currentCalculation = null;
 
-// Format Russian Rubles
+// Currency Formatter
 function formatPrice(num) {
   return Math.round(num).toLocaleString('ru-RU') + ' ₽';
 }
 
-// Calculate Realistic Price & Customs based on Year
-function calculateCustoms(basePrice, year) {
-  const y = parseInt(year, 10);
-  let multiplier = 1.0;
-  let dutyTag = 'льготный тариф 3-5 лет';
-  let dutyMultiplier = 1.0;
-  
-  if (y >= 2023) {
-    // Under 3 years: Fresh / New car. Russian customs applies 48% ad valorem duty!
-    multiplier = 1.35;
-    dutyMultiplier = 1.65;
-    dutyTag = 'ставка 48% (авто до 3 лет)';
-  } else if (y >= 2021 && y <= 2022) {
-    // 3 to 5 years: 'Проходной год'. Minimum sweet-spot FTS tariff (1.5-2.5 € / cc)
-    multiplier = 1.0;
-    dutyMultiplier = 1.0;
-    dutyTag = 'льготный тариф 3-5 лет (проходной)';
+function formatForeign(val, country) {
+  if (country === 'korea') {
+    return Math.round(val).toLocaleString('ru-RU') + ' ₩';
   } else {
-    // Over 5 years (2019-2020): Higher tariff rate (3.0-5.0 € / cc)
-    multiplier = 1.22;
-    dutyMultiplier = 1.55;
-    dutyTag = 'повышенный тариф (авто старше 5 лет)';
+    return Math.round(val).toLocaleString('ru-RU') + ' ¥';
   }
-  
-  const total = Math.round(basePrice * multiplier);
-  const carCost = Math.round(total * 0.60);
-  const freight = currentCountry === 'korea' ? 220000 : 280000;
-  const customs = Math.round(basePrice * 0.22 * dutyMultiplier);
-  const util = 5200;
-  const paperwork = 95000;
-  const commission = total - carCost - freight - customs - util - paperwork;
+}
+
+// -------------------------------------------------------------
+// 1. LIVE CBR EXCHANGE RATES FETCHER
+// -------------------------------------------------------------
+async function fetchLiveCbrRates() {
+  const statusBadge = document.getElementById('cbrStatusBadge');
+  try {
+    const res = await fetch('https://www.cbr-xml-daily.ru/daily_json.js');
+    if (!res.ok) throw new Error('CBR network response not ok');
+    const data = await res.json();
+    
+    if (data && data.Valute) {
+      if (data.Valute.KRW) {
+        RATES.KRW = data.Valute.KRW.Value / (data.Valute.KRW.Nominal || 1000);
+      }
+      if (data.Valute.EUR) {
+        RATES.EUR = data.Valute.EUR.Value;
+      }
+      if (data.Valute.USD) {
+        RATES.USD = data.Valute.USD.Value;
+      }
+      if (data.Valute.CNY) {
+        RATES.CNY = data.Valute.CNY.Value / (data.Valute.CNY.Nominal || 1);
+      }
+      
+      updateRateTickerDisplay(true);
+      updateResultView();
+    }
+  } catch (err) {
+    console.warn('CBR API fetch note (fallback rates active):', err.message);
+    updateRateTickerDisplay(false);
+  }
+}
+
+function updateRateTickerDisplay(isLive) {
+  const elKrw = document.getElementById('cbrKrw');
+  const elEur = document.getElementById('cbrEur');
+  const elUsd = document.getElementById('cbrUsd');
+  const elCny = document.getElementById('cbrCny');
+  const elBadge = document.getElementById('cbrStatusBadge');
+
+  if (elKrw) elKrw.textContent = (RATES.KRW * 1000).toFixed(2);
+  if (elEur) elEur.textContent = RATES.EUR.toFixed(2);
+  if (elUsd) elUsd.textContent = RATES.USD.toFixed(2);
+  if (elCny) elCny.textContent = RATES.CNY.toFixed(2);
+  if (elBadge) {
+    elBadge.textContent = isLive ? 'ЦБ РФ онлайн' : 'Курс ЦБ РФ';
+  }
+}
+
+// -------------------------------------------------------------
+// 2. ACCURATE FTS CUSTOMS TARIFF ENGINE
+// -------------------------------------------------------------
+function calculateCustomsFTS({
+  country = 'korea',
+  priceForeign = 24500000,
+  engineCc = 1999,
+  ageCategory = '3_to_5',
+  yearVal = '2021'
+}) {
+  const foreignRate = country === 'korea' ? RATES.KRW : RATES.CNY;
+  const carCostRub = Math.round(priceForeign * foreignRate);
+  const carCostEur = carCostRub / RATES.EUR;
+
+  // 1. Customs Duty (Пошлина ФТС РФ)
+  let dutyEur = 0;
+  let dutyTag = '';
+  let dutyFormulaDesc = '';
+
+  if (ageCategory === '3_to_5') {
+    // 3–5 лет (проходные): строго в евро за 1 см3 объема двигателя
+    let ratePerCc = 1.5;
+    if (engineCc <= 1000) ratePerCc = 1.5;
+    else if (engineCc <= 1500) ratePerCc = 1.7;
+    else if (engineCc <= 1800) ratePerCc = 2.5;
+    else if (engineCc <= 2300) ratePerCc = 2.7;
+    else if (engineCc <= 3000) ratePerCc = 3.0;
+    else ratePerCc = 3.6;
+
+    dutyEur = engineCc * ratePerCc;
+    dutyTag = `3–5 лет, проходной (${ratePerCc} €/см³)`;
+    dutyFormulaDesc = `${engineCc} см³ × ${ratePerCc} € = ${Math.round(dutyEur).toLocaleString('ru-RU')} €`;
+  } else if (ageCategory === 'under_3') {
+    // До 3 лет (свежие): 48% (или 54% если <= 8500€), но не менее ставки за см3
+    let percent = 0.48;
+    let minRatePerCc = 2.5;
+
+    if (carCostEur <= 8500) {
+      percent = 0.54;
+      minRatePerCc = 2.5;
+    } else if (carCostEur <= 16700) {
+      percent = 0.48;
+      minRatePerCc = 3.5;
+    } else if (carCostEur <= 42300) {
+      percent = 0.48;
+      minRatePerCc = 5.5;
+    } else if (carCostEur <= 84500) {
+      percent = 0.48;
+      minRatePerCc = 7.5;
+    } else if (carCostEur <= 169000) {
+      percent = 0.48;
+      minRatePerCc = 15.0;
+    } else {
+      percent = 0.48;
+      minRatePerCc = 20.0;
+    }
+
+    const dutyByPercent = carCostEur * percent;
+    const dutyByCc = engineCc > 0 ? (engineCc * minRatePerCc) : 0;
+    dutyEur = Math.max(dutyByPercent, dutyByCc);
+    dutyTag = `до 3 лет (${Math.round(percent * 100)}% от стоимости)`;
+    dutyFormulaDesc = dutyByPercent >= dutyByCc
+      ? `${Math.round(percent * 100)}% от ${Math.round(carCostEur).toLocaleString('ru-RU')} € = ${Math.round(dutyEur).toLocaleString('ru-RU')} €`
+      : `мин. ${minRatePerCc} €/см³ (${engineCc} см³) = ${Math.round(dutyEur).toLocaleString('ru-RU')} €`;
+  } else {
+    // Старше 5 лет (непроходные): повышенные ставки за см3
+    let ratePerCc = 3.0;
+    if (engineCc <= 1000) ratePerCc = 3.0;
+    else if (engineCc <= 1500) ratePerCc = 3.2;
+    else if (engineCc <= 1800) ratePerCc = 3.5;
+    else if (engineCc <= 2300) ratePerCc = 4.8;
+    else if (engineCc <= 3000) ratePerCc = 5.0;
+    else ratePerCc = 5.7;
+
+    dutyEur = engineCc * ratePerCc;
+    dutyTag = `старше 5 лет, повышенная (${ratePerCc} €/см³)`;
+    dutyFormulaDesc = `${engineCc} см³ × ${ratePerCc} € = ${Math.round(dutyEur).toLocaleString('ru-RU')} €`;
+  }
+
+  const customsDutyRub = Math.round(dutyEur * RATES.EUR);
+
+  // 2. Таможенный сбор за таможенное оформление (Постановление Правительства РФ)
+  let customsFeeRub = 775;
+  if (carCostRub <= 200000) customsFeeRub = 775;
+  else if (carCostRub <= 450000) customsFeeRub = 1550;
+  else if (carCostRub <= 1200000) customsFeeRub = 3100;
+  else if (carCostRub <= 2700000) customsFeeRub = 8530;
+  else if (carCostRub <= 4200000) customsFeeRub = 12000;
+  else if (carCostRub <= 5500000) customsFeeRub = 15500;
+  else if (carCostRub <= 7000000) customsFeeRub = 20000;
+  else if (carCostRub <= 8000000) customsFeeRub = 23000;
+  else if (carCostRub <= 9000000) customsFeeRub = 25000;
+  else if (carCostRub <= 10000000) customsFeeRub = 27000;
+  else customsFeeRub = 30000;
+
+  // 3. Утилизационный сбор РФ (для личного пользования физлиц до 3.0 л)
+  let utilFeeRub = ageCategory === 'under_3' ? 3400 : 5200;
+  if (engineCc > 3000 && engineCc <= 3500) {
+    utilFeeRub = ageCategory === 'under_3' ? 972000 : 1620000;
+  } else if (engineCc > 3500) {
+    utilFeeRub = ageCategory === 'under_3' ? 1235000 : 1620000;
+  }
+
+  // 4. Логистика и расходы в стране отправления
+  let freightAndOriginRub = 0;
+  if (country === 'korea') {
+    const koreaLocalCosts = Math.round(1500000 * RATES.KRW); // снятие с учета, порт Инчхон/Пусан
+    const seaFreight = Math.round(1100 * RATES.USD);         // паром во Владивосток
+    freightAndOriginRub = koreaLocalCosts + seaFreight;
+  } else {
+    const chinaLocalCosts = Math.round(6500 * RATES.CNY);   // экспортная лицензия Хоргос
+    const deliveryToRf = 185000;                             // автовоз в РФ
+    freightAndOriginRub = chinaLocalCosts + deliveryToRf;
+  }
+
+  // 5. Оформление в РФ: СБКТС, ЭПТС, лаборатория, таможенный брокер
+  const paperworkAndCertRub = 95000;
+
+  // 6. Фиксированная комиссия под ключ
+  const commissionRub = 120000;
+
+  // Итого под ключ
+  const totalRub = carCostRub + customsDutyRub + customsFeeRub + utilFeeRub + freightAndOriginRub + paperworkAndCertRub + commissionRub;
 
   return {
-    total,
-    carCost,
-    freight,
-    customs,
-    util,
-    paperwork,
-    commission,
-    dutyTag
+    priceForeign,
+    foreignCurrency: country === 'korea' ? '₩' : '¥',
+    carCostRub,
+    carCostEur,
+    customsDutyRub,
+    customsFeeRub,
+    utilFeeRub,
+    freightAndOriginRub,
+    paperworkAndCertRub,
+    commissionRub,
+    totalRub,
+    dutyTag,
+    dutyFormulaDesc
   };
 }
 
-// Populate Brands Dropdown with "Other car" Option
+// -------------------------------------------------------------
+// 3. UI POPULATION & CALCULATION LOGIC
+// -------------------------------------------------------------
+
+function getAgeCategoryFromYear(yearStr) {
+  const y = parseInt(yearStr, 10);
+  if (y >= 2024) return 'under_3';
+  if (y >= 2021 && y <= 2023) return '3_to_5';
+  return 'over_5';
+}
+
 function populateBrands() {
   const brandSelect = document.getElementById('selectBrand');
   if (!brandSelect) return;
@@ -146,7 +319,6 @@ function populateBrands() {
     brandSelect.appendChild(opt);
   });
   
-  // Custom / Other car option
   const otherOpt = document.createElement('option');
   otherOpt.value = 'other';
   otherOpt.textContent = '✨ Другая марка (Индивидуальный подбор)';
@@ -157,7 +329,6 @@ function populateBrands() {
   populateModels();
 }
 
-// Populate Models Dropdown with "Other model" Option
 function populateModels() {
   const modelSelect = document.getElementById('selectModel');
   if (!modelSelect) return;
@@ -167,7 +338,7 @@ function populateModels() {
   if (currentBrand === 'other') {
     const opt = document.createElement('option');
     opt.value = 'other';
-    opt.textContent = 'Любая модель (рассчитать с менеджером)';
+    opt.textContent = 'Любая модель (свободный расчет с Encar)';
     modelSelect.appendChild(opt);
     isCustomCar = true;
     updateResultView();
@@ -180,12 +351,12 @@ function populateModels() {
   models.forEach((item, idx) => {
     const opt = document.createElement('option');
     opt.value = item.model;
-    opt.textContent = item.model;
+    const priceFmt = formatForeign(item.priceForeign, currentCountry);
+    opt.textContent = `${item.model} — от ${priceFmt}`;
     if (idx === 0) opt.selected = true;
     modelSelect.appendChild(opt);
   });
   
-  // Add other model option
   const otherOpt = document.createElement('option');
   otherOpt.value = 'other';
   otherOpt.textContent = 'Другая модель этой марки...';
@@ -197,7 +368,6 @@ function populateModels() {
   }
 }
 
-// Update Result Card and Breakdown
 function updateResultView() {
   const resPrice = document.getElementById('resPrice');
   const resTitle = document.getElementById('resTitle');
@@ -208,85 +378,230 @@ function updateResultView() {
   const resSub = document.getElementById('resPriceSub');
   
   if (!resPrice || !resTitle || !resSpecs) return;
-  
-  // Custom Car Selection Handling
-  if (isCustomCar || currentBrand === 'other') {
-    resPrice.textContent = 'Индивидуально';
-    resCaption.textContent = 'Под ваш бюджет:';
-    resSub.textContent = 'Рассчитаем любой лот с аукционов под ключ с гарантией';
-    resTitle.textContent = 'Индивидуальный подбор авто';
-    resSpecs.textContent = `${currentCountry === 'korea' ? 'Корея (Encar)' : 'Китай'} • Подбор по 140 пунктам`;
-    if (resThumb) resThumb.src = 'img/car_other.png';
-    if (orderBtnText) orderBtnText.textContent = 'Обсудить подбор с менеджером';
-    
-    // Breakdown values
-    const dCost = document.getElementById('detailCarCost');
-    const dFreight = document.getElementById('detailFreight');
-    const dDuty = document.getElementById('detailDuty');
-    const dDutyTag = document.getElementById('detailDutyTag');
-    if (dCost) dCost.textContent = 'По бюджету';
-    if (dFreight) dFreight.textContent = 'По маршруту';
-    if (dDuty) dDuty.textContent = 'По сетке ФТС';
-    if (dDutyTag) dDutyTag.textContent = 'точный расчет по объему двигателя';
-    return;
+
+  let calc = null;
+  let carName = '';
+  let specsText = '';
+  let imgSrc = 'img/calc_cars.png';
+  let foreignSummary = '';
+
+  if (calcMode === 'encar') {
+    // Mode 2: Free Encar / Custom Lot
+    const priceForeign = parseFloat(document.getElementById('encarPriceInput')?.value) || 24500000;
+    const engineCc = parseInt(document.getElementById('encarEngineCcInput')?.value, 10) || 1999;
+    const ageCategory = document.getElementById('encarAgeSelect')?.value || '3_to_5';
+    const lotInput = document.getElementById('encarLotInput')?.value.trim();
+
+    calc = calculateCustomsFTS({
+      country: currentCountry,
+      priceForeign,
+      engineCc,
+      ageCategory
+    });
+
+    const flag = currentCountry === 'korea' ? '🇰🇷' : '🇨🇳';
+    carName = lotInput ? `${flag} ${lotInput}` : `${flag} Автомобиль с ${currentCountry === 'korea' ? 'Encar' : 'рынка Китая'}`;
+    const ageLabel = ageCategory === '3_to_5' ? '3–5 лет (проходной)' : (ageCategory === 'under_3' ? 'до 3 лет' : 'старше 5 лет');
+    specsText = `${(engineCc / 1000).toFixed(1)} л (${engineCc} см³) • ${ageLabel}`;
+    imgSrc = currentCountry === 'korea' ? 'img/car_k5.png' : 'img/car_monjaro.png';
+    foreignSummary = formatForeign(priceForeign, currentCountry);
+  } else {
+    // Mode 1: Catalog
+    if (isCustomCar || currentBrand === 'other') {
+      resPrice.textContent = 'Индивидуально';
+      resCaption.textContent = 'Под ваш бюджет:';
+      resSub.textContent = 'Рассчитаем любой лот с Encar под ключ с фиксированной гарантией';
+      resTitle.textContent = 'Индивидуальный подбор авто';
+      resSpecs.textContent = `${currentCountry === 'korea' ? 'Корея (Encar)' : 'Китай'} • Расчет по тарифам ФТС 2026`;
+      if (resThumb) resThumb.src = 'img/car_other.png';
+      if (orderBtnText) orderBtnText.textContent = 'Обсудить подбор с менеджером';
+      return;
+    }
+
+    if (!currentModelData) return;
+
+    const ageCategory = getAgeCategoryFromYear(selectedYear);
+    calc = calculateCustomsFTS({
+      country: currentCountry,
+      priceForeign: currentModelData.priceForeign,
+      engineCc: currentModelData.engineCc,
+      ageCategory,
+      yearVal: selectedYear
+    });
+
+    carName = `${currentBrand} ${currentModelData.model}`;
+    specsText = `${selectedYear} год • ${currentModelData.engineDesc}`;
+    imgSrc = currentModelData.img || 'img/calc_cars.png';
+    foreignSummary = formatForeign(currentModelData.priceForeign, currentCountry);
   }
-  
-  if (!currentModelData) return;
-  
-  // Standard Car Calculation
-  const calc = calculateCustoms(currentModelData.basePrice, selectedYear);
-  
-  resCaption.textContent = 'Примерный расчёт:';
-  resSub.textContent = 'Итоговая стоимость под ключ (с доставкой, растаможкой и услугами)';
-  resPrice.textContent = formatPrice(calc.total);
-  resTitle.textContent = `${currentBrand} ${currentModelData.model}`;
-  resSpecs.textContent = `${selectedYear} год • ${currentModelData.engine}`;
+
+  currentCalculation = calc;
+
+  // Update Result Banner
+  resCaption.textContent = 'Точный расчет под ключ:';
+  resSub.textContent = `Включает: авто на аукционе, растаможку ФТС, утильсбор, фрахт и СБКТС/ЭПТС`;
+  resPrice.textContent = formatPrice(calc.totalRub);
+  resTitle.textContent = carName;
+  resSpecs.textContent = specsText;
   if (orderBtnText) orderBtnText.textContent = 'Оставить заявку на этот автомобиль';
-  
-  // Dedicated Car Image
-  if (resThumb && currentModelData.img) {
-    resThumb.src = currentModelData.img;
-  }
-  
-  // Detailed Table
+  if (resThumb) resThumb.src = imgSrc;
+
+  // Update Breakdown Drawer
   const dCost = document.getElementById('detailCarCost');
+  const dForeign = document.getElementById('detailForeignPrice');
   const dFreight = document.getElementById('detailFreight');
   const dDuty = document.getElementById('detailDuty');
+  const dDutyFormula = document.getElementById('detailDutyFormula');
   const dDutyTag = document.getElementById('detailDutyTag');
+  const dCustomsFee = document.getElementById('detailCustomsFee');
+  const dUtil = document.getElementById('detailUtil');
+  const dPaperwork = document.getElementById('detailPaperwork');
   const dCommission = document.getElementById('detailCommission');
-  
-  if (dCost) dCost.textContent = formatPrice(calc.carCost);
-  if (dFreight) dFreight.textContent = formatPrice(calc.freight);
-  if (dDuty) dDuty.textContent = formatPrice(calc.customs);
+
+  if (dCost) dCost.innerHTML = `${formatPrice(calc.carCostRub)} <span class="sub-cost-tag" id="detailForeignPrice">(${foreignSummary})</span>`;
+  if (dFreight) dFreight.textContent = formatPrice(calc.freightAndOriginRub);
+  if (dDuty) dDuty.innerHTML = `${formatPrice(calc.customsDutyRub)} <span class="sub-cost-tag" id="detailDutyFormula">(${calc.dutyFormulaDesc})</span>`;
   if (dDutyTag) dDutyTag.textContent = calc.dutyTag;
-  if (dCommission) dCommission.textContent = formatPrice(calc.commission);
+  if (dCustomsFee) dCustomsFee.textContent = formatPrice(calc.customsFeeRub);
+  if (dUtil) dUtil.textContent = formatPrice(calc.utilFeeRub);
+  if (dPaperwork) dPaperwork.textContent = formatPrice(calc.paperworkAndCertRub);
+  if (dCommission) dCommission.textContent = formatPrice(calc.commissionRub);
 }
 
-// Setup Country Toggles (Korea vs China)
+// -------------------------------------------------------------
+// 4. MODE SWITCHER & QUICK CHIPS
+// -------------------------------------------------------------
+function setupModeSwitcher() {
+  const tabCatalog = document.getElementById('tabModeCatalog');
+  const tabEncar = document.getElementById('tabModeEncar');
+  const catalogWrap = document.getElementById('catalogFieldsWrap');
+  const encarWrap = document.getElementById('encarFieldsWrap');
+  const currencyTag = document.getElementById('encarCurrencyTag');
+  const lblPrice = document.getElementById('lblEncarPrice');
+
+  if (tabCatalog && tabEncar) {
+    tabCatalog.addEventListener('click', () => {
+      tabCatalog.classList.add('active');
+      tabEncar.classList.remove('active');
+      calcMode = 'catalog';
+      if (catalogWrap) catalogWrap.style.display = 'block';
+      if (encarWrap) encarWrap.style.display = 'none';
+      updateResultView();
+    });
+
+    tabEncar.addEventListener('click', () => {
+      tabEncar.classList.add('active');
+      tabCatalog.classList.remove('active');
+      calcMode = 'encar';
+      if (catalogWrap) catalogWrap.style.display = 'none';
+      if (encarWrap) encarWrap.style.display = 'block';
+      updateResultView();
+    });
+  }
+
+  // Quick Chips for Free Encar Input
+  document.querySelectorAll('.quick-chip-btn[data-price]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pInput = document.getElementById('encarPriceInput');
+      if (pInput) {
+        pInput.value = btn.getAttribute('data-price');
+        updateResultView();
+      }
+    });
+  });
+
+  document.querySelectorAll('.quick-chip-btn[data-cc]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ccInput = document.getElementById('encarEngineCcInput');
+      if (ccInput) {
+        ccInput.value = btn.getAttribute('data-cc');
+        updateResultView();
+      }
+    });
+  });
+
+  // Real-time input listeners for free calculator
+  const pInput = document.getElementById('encarPriceInput');
+  const ccInput = document.getElementById('encarEngineCcInput');
+  const ageSelect = document.getElementById('encarAgeSelect');
+  const lotInput = document.getElementById('encarLotInput');
+
+  if (pInput) pInput.addEventListener('input', updateResultView);
+  if (ccInput) ccInput.addEventListener('input', updateResultView);
+  if (ageSelect) ageSelect.addEventListener('change', updateResultView);
+  if (lotInput) lotInput.addEventListener('input', updateResultView);
+}
+
+// -------------------------------------------------------------
+// 5. COUNTRY TOGGLES & SELECT LISTENERS
+// -------------------------------------------------------------
 function setupCountryToggles() {
   const btnKorea = document.getElementById('btnCountryKorea');
   const btnChina = document.getElementById('btnCountryChina');
+  const currencyTag = document.getElementById('encarCurrencyTag');
+  const lblPrice = document.getElementById('lblEncarPrice');
+  const currencyHint = document.getElementById('encarCurrencyHint');
   
-  if (btnKorea) {
-    btnKorea.addEventListener('click', () => {
-      btnChina.classList.remove('active');
-      btnKorea.classList.add('active');
-      currentCountry = 'korea';
-      populateBrands();
-    });
+  function applyCountry(country) {
+    currentCountry = country;
+    const priceChipsRow = document.querySelector('#encarFieldsWrap .calc-field-group:first-child .quick-chips-row');
+    
+    if (country === 'korea') {
+      btnKorea?.classList.add('active');
+      btnChina?.classList.remove('active');
+      if (currencyTag) currencyTag.textContent = '₩ (воны)';
+      if (lblPrice) lblPrice.textContent = 'Цена на Encar';
+      if (currencyHint) currencyHint.textContent = 'в вонах (₩)';
+      const pInput = document.getElementById('encarPriceInput');
+      if (pInput && pInput.value < 1000000) pInput.value = 24500000;
+      
+      if (priceChipsRow) {
+        priceChipsRow.innerHTML = `
+          <button type="button" class="quick-chip-btn" data-price="18500000">18.5 млн ₩</button>
+          <button type="button" class="quick-chip-btn" data-price="24500000">24.5 млн ₩</button>
+          <button type="button" class="quick-chip-btn" data-price="32000000">32 млн ₩</button>
+          <button type="button" class="quick-chip-btn" data-price="54000000">54 млн ₩</button>
+        `;
+      }
+    } else {
+      btnChina?.classList.add('active');
+      btnKorea?.classList.remove('active');
+      if (currencyTag) currencyTag.textContent = '¥ (юани)';
+      if (lblPrice) lblPrice.textContent = 'Цена в Китае';
+      if (currencyHint) currencyHint.textContent = 'в юанях (¥)';
+      const pInput = document.getElementById('encarPriceInput');
+      if (pInput && pInput.value > 1000000) pInput.value = 185000;
+      
+      if (priceChipsRow) {
+        priceChipsRow.innerHTML = `
+          <button type="button" class="quick-chip-btn" data-price="125000">125 тыс ¥</button>
+          <button type="button" class="quick-chip-btn" data-price="185000">185 тыс ¥</button>
+          <button type="button" class="quick-chip-btn" data-price="265000">265 тыс ¥</button>
+          <button type="button" class="quick-chip-btn" data-price="350000">350 тыс ¥</button>
+        `;
+      }
+    }
+
+    if (priceChipsRow) {
+      priceChipsRow.querySelectorAll('.quick-chip-btn[data-price]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const pInput = document.getElementById('encarPriceInput');
+          if (pInput) {
+            pInput.value = btn.getAttribute('data-price');
+            updateResultView();
+          }
+        });
+      });
+    }
+
+    populateBrands();
+    updateResultView();
   }
-  
-  if (btnChina) {
-    btnChina.addEventListener('click', () => {
-      btnKorea.classList.remove('active');
-      btnChina.classList.add('active');
-      currentCountry = 'china';
-      populateBrands();
-    });
-  }
+
+  if (btnKorea) btnKorea.addEventListener('click', () => applyCountry('korea'));
+  if (btnChina) btnChina.addEventListener('click', () => applyCountry('china'));
 }
 
-// Setup Select & Form Listeners
 function setupSelectListeners() {
   const brandSelect = document.getElementById('selectBrand');
   const modelSelect = document.getElementById('selectModel');
@@ -339,7 +654,6 @@ function setupSelectListeners() {
   }
 }
 
-// Breakdown Drawer Toggle
 function setupDrawer() {
   const toggleBtn = document.getElementById('toggleDetailsBtn');
   const drawer = document.getElementById('breakdownDrawer');
@@ -352,7 +666,88 @@ function setupDrawer() {
   });
 }
 
-// Lead Modal Flow & 152-FZ Privacy Modals
+// -------------------------------------------------------------
+// 6. URL PERSONALIZATION ENGINE (?brand=...&tg=...&phone=...)
+// -------------------------------------------------------------
+function applyUrlPersonalization() {
+  const params = new URLSearchParams(window.location.search);
+  const brand = params.get('brand') || params.get('company') || params.get('name');
+  const tg = params.get('tg') || params.get('telegram');
+  const phone = params.get('phone') || params.get('tel');
+  const country = params.get('country');
+  const mode = params.get('mode');
+
+  // 1. Dynamic Brand Name Replacement
+  if (brand) {
+    const cleanBrand = brand.trim();
+    document.title = `${cleanBrand} — Автомобили из Кореи и Китая под ключ`;
+    
+    document.querySelectorAll('.brand-name-dynamic').forEach(el => {
+      el.textContent = cleanBrand;
+    });
+
+    const heroSuffix = document.getElementById('heroBrandSuffix');
+    if (heroSuffix) {
+      heroSuffix.textContent = `с ${cleanBrand}`;
+    }
+  }
+
+  // 2. Dynamic Telegram Contact Replacement
+  if (tg) {
+    const cleanTg = tg.trim().replace(/^@/, '');
+    const tgUrl = `https://t.me/${cleanTg}`;
+
+    // Show header Telegram pill
+    const headerTgPill = document.getElementById('headerTgPill');
+    const headerTgUsername = document.getElementById('headerTgUsername');
+    if (headerTgPill && headerTgUsername) {
+      headerTgPill.href = tgUrl;
+      headerTgUsername.textContent = `@${cleanTg}`;
+      headerTgPill.style.display = 'inline-flex';
+    }
+
+    // Update footer Telegram button
+    const footerTgBtn = document.getElementById('footerTgBtn');
+    if (footerTgBtn) {
+      footerTgBtn.href = tgUrl;
+    }
+
+    // Update all dynamic telegram links
+    document.querySelectorAll('.tg-dynamic-link').forEach(link => {
+      link.href = tgUrl;
+    });
+  }
+
+  // 3. Dynamic Phone Replacement
+  if (phone) {
+    const cleanPhone = phone.trim();
+    const telUrl = `tel:${cleanPhone.replace(/[^\d+]/g, '')}`;
+
+    document.querySelectorAll('.phone-dynamic-link').forEach(link => {
+      link.href = telUrl;
+    });
+
+    document.querySelectorAll('.phone-text-dynamic').forEach(span => {
+      span.textContent = cleanPhone;
+    });
+  }
+
+  // 4. Default Country Preset
+  if (country && (country.toLowerCase() === 'china' || country.toLowerCase() === 'korea')) {
+    const btn = country.toLowerCase() === 'china' ? document.getElementById('btnCountryChina') : document.getElementById('btnCountryKorea');
+    if (btn) btn.click();
+  }
+
+  // 5. Default Mode Preset
+  if (mode === 'encar') {
+    const tabEncar = document.getElementById('tabModeEncar');
+    if (tabEncar) tabEncar.click();
+  }
+}
+
+// -------------------------------------------------------------
+// 7. LEAD MODAL & 5-LAYER ANTI-SPAM DEFENSE
+// -------------------------------------------------------------
 function setupModals() {
   const leadModal = document.getElementById('leadModal');
   const privacyModal = document.getElementById('privacyModal');
@@ -374,7 +769,6 @@ function setupModals() {
     });
   }
   
-  // Privacy Modal Triggers
   const privacyOpenLinks = [
     document.getElementById('openPrivacyFooterLink'),
     document.getElementById('openPrivacyBottomLink'),
@@ -399,14 +793,10 @@ function setupModals() {
 
   function openLeadModalWithData() {
     modalOpenedAt = Date.now();
-    if (modalSummaryBox) {
+    if (modalSummaryBox && currentCalculation) {
       const flag = currentCountry === 'korea' ? '🇰🇷' : '🇨🇳';
-      if (isCustomCar || currentBrand === 'other') {
-        modalSummaryBox.textContent = `${flag} Индивидуальный подбор авто под ключ`;
-      } else if (currentModelData) {
-        const calc = calculateCustoms(currentModelData.basePrice, selectedYear);
-        modalSummaryBox.textContent = `${flag} ${currentBrand} ${currentModelData.model} (${selectedYear} год) • ${formatPrice(calc.total)} под ключ`;
-      }
+      const resTitle = document.getElementById('resTitle')?.textContent || 'Авто под заказ';
+      modalSummaryBox.textContent = `${flag} ${resTitle} • ${formatPrice(currentCalculation.totalRub)} под ключ`;
     }
     if (modalFormView) modalFormView.style.display = 'block';
     if (modalSuccessView) modalSuccessView.style.display = 'none';
@@ -490,7 +880,7 @@ function setupModals() {
     });
   }
   
-  // Submit handler with 152-FZ verification, Anti-Spam Honeypot, Speed-Gate & Cooldown
+  // Submit handler with 152-FZ, Honeypot, Speed-Gate & Cooldown
   if (leadForm) {
     leadForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -510,7 +900,7 @@ function setupModals() {
         return;
       }
 
-      // 2. Phone mask completeness check (+7 (XXX) XXX-XX-XX requires 11 digits)
+      // 2. Phone mask completeness check (11 digits)
       const rawDigits = phone.replace(/\D/g, '');
       if (rawDigits.length < 11) {
         if (modalError) {
@@ -544,10 +934,9 @@ function setupModals() {
       // 5. Anti-Spam: Honeypot & Speed-Gate Check
       const isHpSpam = hpField && hpField.value.trim().length > 0;
       const fillDuration = now - modalOpenedAt;
-      const isTooFast = modalOpenedAt > 0 && fillDuration < 1200; // scripts submit in < 1.2s
+      const isTooFast = modalOpenedAt > 0 && fillDuration < 1200;
 
       if (isHpSpam || isTooFast) {
-        // Silently mock success to trap competitor bots / scrapers
         console.warn('Bot detected by defense matrix. Silently discarding submission.');
         setTimeout(() => {
           if (modalFormView) modalFormView.style.display = 'none';
@@ -568,16 +957,13 @@ function setupModals() {
         submitBtn.innerHTML = '<span>Отправка заявки...</span>';
       }
       
-      let carStr = isCustomCar || currentBrand === 'other' ? 'Индивидуальный подбор' : `${currentBrand} ${currentModelData.model}`;
-      const calc = (currentModelData && !isCustomCar && currentBrand !== 'other')
-        ? calculateCustoms(currentModelData.basePrice, selectedYear)
-        : { total: 0, customs: 0 };
+      const resTitle = document.getElementById('resTitle')?.textContent || 'Авто под заказ';
+      const resSpecs = document.getElementById('resSpecs')?.textContent || '';
+      const totalNum = currentCalculation?.totalRub || 0;
+      const dutyNum = currentCalculation?.customsDutyRub || 0;
+      const foreignPrice = currentCalculation?.priceForeign || 0;
+      const currency = currentCalculation?.foreignCurrency || '₩';
       
-      let priceStr = isCustomCar || currentBrand === 'other' ? 'Под бюджет' : formatPrice(calc.total);
-      const totalNum = calc.total || 0;
-      const dutyNum = calc.customs || 0;
-      
-      // Dual-compatible payload (works with both worker structures)
       const payload = {
         client: {
           name: name,
@@ -585,8 +971,11 @@ function setupModals() {
           contact: tgOrCity
         },
         order: {
-          car: carStr,
+          car: resTitle,
+          specs: resSpecs,
           country: currentCountry === 'korea' ? 'Южная Корея' : 'Китай',
+          foreignPrice: `${foreignPrice.toLocaleString('ru-RU')} ${currency}`,
+          cbrRate: currentCountry === 'korea' ? `${(RATES.KRW * 1000).toFixed(2)} ₽/1000₩` : `${RATES.CNY.toFixed(2)} ₽/¥`,
           grandTotalRub: totalNum,
           savingsRub: Math.round(totalNum * 0.15),
           customsDutyRub: dutyNum
@@ -594,19 +983,17 @@ function setupModals() {
         name: name,
         contact: phone,
         city: tgOrCity,
-        car: carStr,
+        car: resTitle,
         year: selectedYear,
-        price: priceStr,
+        price: formatPrice(totalNum),
         country: currentCountry === 'korea' ? 'Южная Корея' : 'Китай',
         user_website_hp: hpField ? hpField.value : '',
         fill_time_ms: fillDuration,
         timestamp: new Date().toISOString()
       };
       
-      // Record successful send timestamp for cooldown
       localStorage.setItem('lead_last_sent_ts', Date.now().toString());
 
-      // Dispatch in background to Cloudflare Worker
       fetch(CF_WORKER_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -628,7 +1015,6 @@ function setupModals() {
   }
 }
 
-// Cookie Acceptance
 function setupCookieBar() {
   const cookieBar = document.getElementById('cookieBar');
   const acceptBtn = document.getElementById('cookieAcceptBtn');
@@ -645,7 +1031,6 @@ function setupCookieBar() {
   });
 }
 
-// Smooth Navigation
 function setupSmoothNav() {
   document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener('click', (e) => {
@@ -660,13 +1045,22 @@ function setupSmoothNav() {
   });
 }
 
-// Initialization on DOMContentLoaded
+// -------------------------------------------------------------
+// 8. MASTER INITIALIZATION
+// -------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
   setupCountryToggles();
+  setupModeSwitcher();
   populateBrands();
   setupSelectListeners();
   setupDrawer();
   setupModals();
   setupCookieBar();
   setupSmoothNav();
+
+  // Apply URL personalization right away
+  applyUrlPersonalization();
+
+  // Fetch live CBR rates in background
+  fetchLiveCbrRates();
 });
