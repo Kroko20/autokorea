@@ -26,6 +26,20 @@
   --border-light: #ECEEF3;
   --border-subtle: #F3F4F6;
   --border-input: #E2E8F0;
+
+  --bg-step-card: linear-gradient(180deg, #FFFFFF 0%, #F9FAFB 100%);
+  --border-step-card: #ECEEF3;
+  --shadow-step-card: 0 4px 16px rgba(17, 24, 39, 0.05);
+  --shadow-step-card-hover: 0 14px 28px rgba(88, 51, 234, 0.12);
+  --bg-ticker-chip: #F8FAFC;
+  --bg-ticker-chip-hover: #EEF2FF;
+  --border-ticker-chip: #E2E8F0;
+  --shadow-ticker: 0 4px 14px rgba(17, 24, 39, 0.05);
+  --color-ticker-badge-text: #059669;
+  --color-ticker-badge-bg: rgba(16, 185, 129, 0.12);
+  --color-ticker-badge-border: rgba(16, 185, 129, 0.3);
+  --bg-placeholder: linear-gradient(145deg, #F8FAFC 0%, #EEF2FF 100%);
+  --border-placeholder: #E2E8F0;
   
   --radius-sm: 8px;
   --radius-md: 14px;
@@ -35,8 +49,8 @@
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.05);
   --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.08);
-  --shadow-purple: 0 8px 24px rgba(229, 46, 46, 0.32);
-  --shadow-primary: 0 8px 24px rgba(229, 46, 46, 0.32);
+  --shadow-purple: 0 8px 24px rgba(88, 51, 234, 0.22);
+  --shadow-primary: 0 8px 24px rgba(88, 51, 234, 0.22);
 }
 
 /* =========================================
@@ -65,6 +79,20 @@ body.theme-proavto {
   --border-light: #252A38;
   --border-subtle: #1C202C;
   --border-input: #2D3344;
+
+  --bg-step-card: linear-gradient(180deg, #181C26 0%, #12151E 100%);
+  --border-step-card: rgba(255, 255, 255, 0.08);
+  --shadow-step-card: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --shadow-step-card-hover: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 20px rgba(229, 46, 46, 0.22);
+  --bg-ticker-chip: #1C2230;
+  --bg-ticker-chip-hover: #1F2432;
+  --border-ticker-chip: #252A38;
+  --shadow-ticker: 0 4px 18px rgba(0, 0, 0, 0.25);
+  --color-ticker-badge-text: #34D399;
+  --color-ticker-badge-bg: rgba(16, 185, 129, 0.14);
+  --color-ticker-badge-border: rgba(16, 185, 129, 0.3);
+  --bg-placeholder: linear-gradient(145deg, #161A25 0%, #0F1219 100%);
+  --border-placeholder: rgba(255, 255, 255, 0.1);
   
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
@@ -91,6 +119,7 @@ html {
 body {
   line-height: 1.5;
   overflow-x: hidden;
+  overflow-x: clip;
   padding-bottom: 40px;
 }
 
@@ -388,7 +417,8 @@ body {
 }
 
 .calc-intro {
-  position: relative;
+  position: sticky;
+  top: 96px;
   padding-top: 16px;
 }
 
@@ -685,6 +715,56 @@ body:not(.theme-proavto) .result-banner.drawer-open {
   transition: transform 0.2s;
 }
 
+.result-car-placeholder {
+  width: 120px;
+  height: 70px;
+  min-width: 120px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-placeholder);
+  border: 1px solid var(--border-placeholder);
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: var(--color-text-muted);
+  box-sizing: border-box;
+}
+
+.placeholder-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.placeholder-badge {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--color-text-muted);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+body:not(.theme-proavto) .placeholder-badge {
+  background: rgba(17, 24, 39, 0.06);
+}
+
+.placeholder-car-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-dark);
+  opacity: 0.85;
+}
+
+.silhouette-car-svg {
+  max-width: 100%;
+  height: auto;
+}
+
 .result-car-info {
   display: flex;
   flex-direction: column;
@@ -897,13 +977,13 @@ body:not(.theme-proavto) .result-banner.drawer-open {
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
-  background: linear-gradient(180deg, #181C26 0%, #12151E 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-step-card);
+  border: 1px solid var(--border-step-card);
   border-radius: 18px;
   padding: 28px 24px;
   position: relative;
   transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-step-card);
   box-sizing: border-box;
   min-height: 170px;
 }
@@ -911,14 +991,14 @@ body:not(.theme-proavto) .result-banner.drawer-open {
 .step-card:hover,
 .step-col:hover {
   transform: translateY(-4px);
-  border-color: rgba(229, 46, 46, 0.45);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 20px rgba(229, 46, 46, 0.22);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-step-card-hover);
 }
 
 .step-num {
   font-size: 32px;
   font-weight: 900;
-  color: #E52E2E;
+  color: var(--color-primary);
   line-height: 1;
   margin-bottom: 14px;
   letter-spacing: -0.5px;
@@ -928,7 +1008,7 @@ body:not(.theme-proavto) .result-banner.drawer-open {
 .step-col-title {
   font-size: 18px;
   font-weight: 800;
-  color: #FFFFFF;
+  color: var(--color-text-dark);
   margin-bottom: 8px;
   letter-spacing: -0.2px;
 }
@@ -936,7 +1016,7 @@ body:not(.theme-proavto) .result-banner.drawer-open {
 .step-card-desc,
 .step-col-desc {
   font-size: 13.5px;
-  color: #9CA3AF;
+  color: var(--color-text-muted);
   line-height: 1.5;
   margin: 0;
 }
@@ -1535,6 +1615,8 @@ body.theme-proavto .modal-error-msg,
     gap: 32px;
   }
   .calc-intro {
+    position: static;
+    top: auto;
     text-align: center;
     max-width: 600px;
     margin: 0 auto;
@@ -1862,9 +1944,15 @@ body.theme-proavto .modal-error-msg,
   .result-sum {
     font-size: 24px;
   }
-  .result-car-thumb {
+  .result-car-thumb,
+  .result-car-placeholder {
     width: 92px;
     height: 58px;
+    min-width: 92px;
+  }
+  .silhouette-car-svg {
+    width: 54px;
+    height: 24px;
   }
   .modal-card {
     padding: 24px 18px;
@@ -1885,8 +1973,8 @@ body.theme-proavto .modal-error-msg,
    ========================================= */
 
 .cbr-rate-ticker {
-  background: #12151E;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-ticker);
+  border: 1px solid var(--border-light);
   border-radius: 14px;
   padding: 10px 18px;
   margin-bottom: 24px;
@@ -1894,7 +1982,7 @@ body.theme-proavto .modal-error-msg,
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-ticker);
   transition: all 0.2s ease;
 }
 
@@ -1934,7 +2022,7 @@ body.theme-proavto .modal-error-msg,
 .cbr-ticker-title {
   font-size: 13px;
   font-weight: 700;
-  color: #FFFFFF;
+  color: var(--color-text-dark);
   letter-spacing: -0.2px;
   white-space: nowrap;
 }
@@ -1942,11 +2030,11 @@ body.theme-proavto .modal-error-msg,
 .cbr-ticker-badge {
   font-size: 11px;
   font-weight: 700;
-  color: #34D399;
-  background: rgba(16, 185, 129, 0.14);
+  color: var(--color-ticker-badge-text);
+  background: var(--color-ticker-badge-bg);
   padding: 3px 9px;
   border-radius: 8px;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  border: 1px solid var(--color-ticker-badge-border);
   text-transform: uppercase;
   letter-spacing: 0.4px;
   white-space: nowrap;
@@ -1965,23 +2053,23 @@ body.theme-proavto .modal-error-msg,
   align-items: center;
   gap: 7px;
   font-size: 12.5px;
-  color: #9CA3AF;
-  background: #181C26;
+  color: var(--color-text-muted);
+  background: var(--bg-ticker-chip);
   padding: 5px 11px;
   border-radius: 9px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-ticker-chip);
   white-space: nowrap;
   transition: all 0.2s ease;
 }
 
 .cbr-chip:hover {
-  background: #1F2432;
-  border-color: rgba(229, 46, 46, 0.3);
-  color: #E5E7EB;
+  background: var(--bg-ticker-chip-hover);
+  border-color: var(--color-primary);
+  color: var(--color-text-dark);
 }
 
 .cbr-chip strong {
-  color: #FFFFFF;
+  color: var(--color-text-dark);
   font-weight: 800;
 }
 
@@ -2438,8 +2526,14 @@ body.theme-proavto .step-icon-box,
 
 body.theme-proavto .step-card,
 :root[data-theme="proavto"] .step-card {
-  background: linear-gradient(180deg, #181C26 0%, #12151E 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-step-card);
+  border: 1px solid var(--border-step-card);
+}
+
+body.theme-proavto .step-card:hover,
+:root[data-theme="proavto"] .step-card:hover {
+  border-color: rgba(229, 46, 46, 0.45);
+  box-shadow: var(--shadow-step-card-hover);
 }
 
 body.theme-proavto .step-badge,

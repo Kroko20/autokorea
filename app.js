@@ -154,109 +154,129 @@ const RATES = {
 const CF_WORKER_URL = 'https://shy-sun-dedf.odnovalov14.workers.dev';
 const LOCAL_LEAD_URL = './api/lead.php';
 
-// 4-Country Automotive Catalog with HP metadata for EV & Hybrids
+// Minimalist SVG Country Flags & Car Silhouettes for non-photo previews
+const COUNTRY_FLAGS_SVG = {
+  korea: '<svg class="ticker-flag" width="18" height="12" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" rx="2" fill="#FFFFFF"/><circle cx="15" cy="10" r="4.5" fill="#C60C30"/><path d="M15 5.5C17.5 5.5 17.5 10 15 10C12.5 10 12.5 14.5 15 14.5C12.5 14.5 10.5 12.5 10.5 10C10.5 7.5 12.5 5.5 15 5.5Z" fill="#003478"/><circle cx="15" cy="12.25" r="2.25" fill="#003478"/></svg>',
+  china: '<svg class="ticker-flag" width="18" height="12" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" rx="2" fill="#DE2910"/><polygon points="5,3 6.5,7.5 2.5,4.7 7.5,4.7 3.5,7.5" fill="#FFDE00"/></svg>',
+  japan: '<svg class="ticker-flag" width="18" height="12" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" rx="2" fill="#FFFFFF"/><circle cx="15" cy="10" r="6" fill="#BC002D"/></svg>',
+  uae: '<svg class="ticker-flag" width="18" height="12" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="6.6" fill="#00732F"/><rect y="6.6" width="30" height="6.6" fill="#FFFFFF"/><rect y="13.2" width="30" height="6.8" fill="#000000"/><rect width="8" height="20" rx="1" fill="#FF0000"/></svg>'
+};
+
+const CAR_SILHOUETTES_SVG = {
+  sedan: '<svg class="silhouette-car-svg" width="68" height="28" viewBox="0 0 68 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5C4 16.5 6.5 14.5 11 13.8L20 7.2C22.2 5.7 25.5 5 29.5 5H41.5C45.5 5 49 6.5 52.5 10.5L60.5 12.5C63.2 13.2 64.5 15 64.5 17.5V20C64.5 21.1 63.6 22 62.5 22H57.5M10.5 22H5.5C4.6 22 4 21.2 4 19.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 22H47" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="15.5" cy="21.5" r="4" stroke="currentColor" stroke-width="1.8"/><circle cx="52" cy="21.5" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M22.5 12.5L26 7.5H39.5L47 12.5H22.5Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" opacity="0.55"/><path d="M58 14.5H62" stroke="#E52E2E" stroke-width="2" stroke-linecap="round"/></svg>',
+  suv: '<svg class="silhouette-car-svg" width="68" height="30" viewBox="0 0 68 30" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 20.5C5 16.5 6.5 14.2 9.5 13.5L13.5 6.8C14.8 5.2 17 4.5 20 4.5H43.5C46.5 4.5 49 6.2 52 10.5L60.5 12.2C62.8 12.7 64 14.5 64 17V21C64 22.1 63.1 23 62 23H58M11 23H6.5C5.6 23 5 22.1 5 20.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M22.5 23H46.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="16.5" cy="22.5" r="4.5" stroke="currentColor" stroke-width="1.8"/><circle cx="52.5" cy="22.5" r="4.5" stroke="currentColor" stroke-width="1.8"/><path d="M16 12.5L19 7H42L48.5 12.5H16Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" opacity="0.55"/><path d="M58.5 14.5H62" stroke="#E52E2E" stroke-width="2" stroke-linecap="round"/></svg>'
+};
+
+const COUNTRY_PLATFORM_HINTS = {
+  korea: 'на площадке Encar в Корее',
+  china: 'на площадках Китая',
+  japan: 'на аукционах Японии',
+  uae: 'на площадках ОАЭ'
+};
+
+// 4-Country Automotive Catalog with exact-only verified images + bodyType silhouettes
 const CAR_CATALOG = {
   korea: {
     brands: {
       'Hyundai': [
-        { model: 'Avante (Elantra)', baseYear: 2021, engineDesc: '1.6 л • 123 л.с.', engineCc: 1598, hp: 123, priceForeign: 18500000, img: 'img/car_avante.png' },
-        { model: 'Sonata DN8', baseYear: 2021, engineDesc: '2.0 л • 160 л.с.', engineCc: 1999, hp: 160, priceForeign: 22500000, img: 'img/car_avante.png' },
-        { model: 'Santa Fe TM', baseYear: 2021, engineDesc: '2.5 л Turbo • 281 л.с.', engineCc: 2497, hp: 281, priceForeign: 28500000, img: 'img/car_genesis.png' },
-        { model: 'Palisade 3.8', baseYear: 2021, engineDesc: '3.8 л • 295 л.с.', engineCc: 3778, hp: 295, priceForeign: 33000000, img: 'img/car_genesis.png' },
-        { model: 'Tucson NX4', baseYear: 2022, engineDesc: '1.6 л Turbo • 180 л.с.', engineCc: 1598, hp: 180, priceForeign: 25000000, img: 'img/car_avante.png' }
+        { model: 'Avante (Elantra)', baseYear: 2021, engineDesc: '1.6 л • 123 л.с.', engineCc: 1598, hp: 123, priceForeign: 18500000, bodyType: 'sedan', img: 'img/car_avante.png' },
+        { model: 'Sonata DN8', baseYear: 2021, engineDesc: '2.0 л • 160 л.с.', engineCc: 1999, hp: 160, priceForeign: 22500000, bodyType: 'sedan' },
+        { model: 'Santa Fe TM', baseYear: 2021, engineDesc: '2.5 л Turbo • 281 л.с.', engineCc: 2497, hp: 281, priceForeign: 28500000, bodyType: 'suv' },
+        { model: 'Palisade 3.8', baseYear: 2021, engineDesc: '3.8 л • 295 л.с.', engineCc: 3778, hp: 295, priceForeign: 33000000, bodyType: 'suv' },
+        { model: 'Tucson NX4', baseYear: 2022, engineDesc: '1.6 л Turbo • 180 л.с.', engineCc: 1598, hp: 180, priceForeign: 25000000, bodyType: 'suv' }
       ],
       'Kia': [
-        { model: 'K5 DL3', baseYear: 2021, engineDesc: '2.0 л • 160 л.с.', engineCc: 1999, hp: 160, priceForeign: 21500000, img: 'img/car_k5.png' },
-        { model: 'Sportage NQ5', baseYear: 2022, engineDesc: '2.0 л Дизель • 186 л.с.', engineCc: 1998, hp: 186, priceForeign: 26500000, img: 'img/car_k5.png' },
-        { model: 'Sorento MQ4', baseYear: 2021, engineDesc: '2.2 л Дизель • 199 л.с.', engineCc: 2151, hp: 199, priceForeign: 31000000, img: 'img/car_k5.png' },
-        { model: 'Carnival 4', baseYear: 2021, engineDesc: '2.2 л Дизель • 199 л.с.', engineCc: 2151, hp: 199, priceForeign: 34000000, img: 'img/car_k5.png' }
+        { model: 'K5 DL3', baseYear: 2021, engineDesc: '2.0 л • 160 л.с.', engineCc: 1999, hp: 160, priceForeign: 21500000, bodyType: 'sedan', img: 'img/car_k5.png' },
+        { model: 'Sportage NQ5', baseYear: 2022, engineDesc: '2.0 л Дизель • 186 л.с.', engineCc: 1998, hp: 186, priceForeign: 26500000, bodyType: 'suv' },
+        { model: 'Sorento MQ4', baseYear: 2021, engineDesc: '2.2 л Дизель • 199 л.с.', engineCc: 2151, hp: 199, priceForeign: 31000000, bodyType: 'suv' },
+        { model: 'Carnival 4', baseYear: 2021, engineDesc: '2.2 л Дизель • 199 л.с.', engineCc: 2151, hp: 199, priceForeign: 34000000, bodyType: 'suv' }
       ],
       'Genesis': [
-        { model: 'GV80 2.5T AWD', baseYear: 2021, engineDesc: '2.5 л Turbo • 304 л.с.', engineCc: 2497, hp: 304, priceForeign: 54000000, img: 'img/car_genesis.png' },
-        { model: 'G80 RG3', baseYear: 2021, engineDesc: '2.5 л Turbo • 304 л.с.', engineCc: 2497, hp: 304, priceForeign: 48000000, img: 'img/car_genesis.png' },
-        { model: 'GV70 AWD', baseYear: 2022, engineDesc: '2.5 л Turbo • 304 л.с.', engineCc: 2497, hp: 304, priceForeign: 45000000, img: 'img/car_genesis.png' },
-        { model: 'G70 2.0T', baseYear: 2021, engineDesc: '2.0 л Turbo • 252 л.с.', engineCc: 1998, hp: 252, priceForeign: 34000000, img: 'img/car_genesis.png' }
+        { model: 'GV80 2.5T AWD', baseYear: 2021, engineDesc: '2.5 л Turbo • 304 л.с.', engineCc: 2497, hp: 304, priceForeign: 54000000, bodyType: 'suv', img: 'img/car_genesis.png' },
+        { model: 'G80 RG3', baseYear: 2021, engineDesc: '2.5 л Turbo • 304 л.с.', engineCc: 2497, hp: 304, priceForeign: 48000000, bodyType: 'sedan' },
+        { model: 'GV70 AWD', baseYear: 2022, engineDesc: '2.5 л Turbo • 304 л.с.', engineCc: 2497, hp: 304, priceForeign: 45000000, bodyType: 'suv' },
+        { model: 'G70 2.0T', baseYear: 2021, engineDesc: '2.0 л Turbo • 252 л.с.', engineCc: 1998, hp: 252, priceForeign: 34000000, bodyType: 'sedan' }
       ],
       'BMW': [
-        { model: '3 Series (G20) 320i', baseYear: 2021, engineDesc: '2.0 л Turbo • 184 л.с.', engineCc: 1998, hp: 184, priceForeign: 35000000, img: 'img/hero_car.jpg' },
-        { model: '5 Series (G30) 520i', baseYear: 2021, engineDesc: '2.0 л Turbo • 184 л.с.', engineCc: 1998, hp: 184, priceForeign: 42000000, img: 'img/hero_car.jpg' },
-        { model: 'X3 20d xDrive', baseYear: 2021, engineDesc: '2.0 л Дизель • 190 л.с.', engineCc: 1995, hp: 190, priceForeign: 44000000, img: 'img/hero_car.jpg' },
-        { model: 'X5 30d xDrive', baseYear: 2021, engineDesc: '3.0 л Дизель • 265 л.с.', engineCc: 2993, hp: 265, priceForeign: 68000000, img: 'img/hero_car.jpg' }
+        { model: '3 Series (G20) 320i', baseYear: 2021, engineDesc: '2.0 л Turbo • 184 л.с.', engineCc: 1998, hp: 184, priceForeign: 35000000, bodyType: 'sedan', img: 'img/hero_car.jpg' },
+        { model: '5 Series (G30) 520i', baseYear: 2021, engineDesc: '2.0 л Turbo • 184 л.с.', engineCc: 1998, hp: 184, priceForeign: 42000000, bodyType: 'sedan' },
+        { model: 'X3 20d xDrive', baseYear: 2021, engineDesc: '2.0 л Дизель • 190 л.с.', engineCc: 1995, hp: 190, priceForeign: 44000000, bodyType: 'suv' },
+        { model: 'X5 30d xDrive', baseYear: 2021, engineDesc: '3.0 л Дизель • 265 л.с.', engineCc: 2993, hp: 265, priceForeign: 68000000, bodyType: 'suv' }
       ]
     }
   },
   china: {
     brands: {
       'Geely': [
-        { model: 'Monjaro 2.0 4WD', baseYear: 2023, engineDesc: '2.0 л Turbo • 238 л.с.', engineCc: 1969, hp: 238, priceForeign: 185000, img: 'img/car_monjaro.png' },
-        { model: 'Tugella 2.0 4WD', baseYear: 2022, engineDesc: '2.0 л Turbo • 238 л.с.', engineCc: 1969, hp: 238, priceForeign: 160000, img: 'img/car_monjaro.png' },
-        { model: 'Atlas Pro 1.5 4WD', baseYear: 2022, engineDesc: '1.5 л Turbo • 177 л.с.', engineCc: 1477, hp: 177, priceForeign: 125000, img: 'img/car_monjaro.png' }
+        { model: 'Monjaro 2.0 4WD', baseYear: 2023, engineDesc: '2.0 л Turbo • 238 л.с.', engineCc: 1969, hp: 238, priceForeign: 185000, bodyType: 'suv', img: 'img/car_monjaro.png' },
+        { model: 'Tugella 2.0 4WD', baseYear: 2022, engineDesc: '2.0 л Turbo • 238 л.с.', engineCc: 1969, hp: 238, priceForeign: 160000, bodyType: 'suv' },
+        { model: 'Atlas Pro 1.5 4WD', baseYear: 2022, engineDesc: '1.5 л Turbo • 177 л.с.', engineCc: 1477, hp: 177, priceForeign: 125000, bodyType: 'suv' }
       ],
       'Li Auto': [
-        { model: 'L7 Pro (EREV)', baseYear: 2023, engineDesc: '1.5T Hybrid • 449 л.с.', engineCc: 1499, hp: 449, priceForeign: 315000, img: 'img/car_l7.png' },
-        { model: 'L8 Max (EREV)', baseYear: 2023, engineDesc: '1.5T Hybrid • 449 л.с.', engineCc: 1499, hp: 449, priceForeign: 355000, img: 'img/car_l7.png' },
-        { model: 'L9 Ultra (EREV)', baseYear: 2023, engineDesc: '1.5T Hybrid • 449 л.с.', engineCc: 1499, hp: 449, priceForeign: 435000, img: 'img/car_l7.png' }
+        { model: 'L7 Pro (EREV)', baseYear: 2023, engineDesc: '1.5T Hybrid • 449 л.с.', engineCc: 1499, hp: 449, priceForeign: 315000, bodyType: 'suv', img: 'img/car_l7.png' },
+        { model: 'L8 Max (EREV)', baseYear: 2023, engineDesc: '1.5T Hybrid • 449 л.с.', engineCc: 1499, hp: 449, priceForeign: 355000, bodyType: 'suv' },
+        { model: 'L9 Ultra (EREV)', baseYear: 2023, engineDesc: '1.5T Hybrid • 449 л.с.', engineCc: 1499, hp: 449, priceForeign: 435000, bodyType: 'suv' }
       ],
       'Zeekr': [
-        { model: '001 RWD (Single Motor)', baseYear: 2023, engineDesc: 'EV • 272 л.с. • RWD', engineCc: 0, hp: 272, isEv: true, priceForeign: 269000, img: 'img/car_zeekr.png' },
-        { model: '001 You 100kWh (4WD)', baseYear: 2023, engineDesc: 'EV • 544 л.с. • 4WD', engineCc: 0, hp: 544, isEv: true, priceForeign: 320000, img: 'img/car_zeekr.png' },
-        { model: '007 4WD', baseYear: 2024, engineDesc: 'EV • 646 л.с. • 4WD', engineCc: 0, hp: 646, isEv: true, priceForeign: 265000, img: 'img/car_zeekr.png' },
-        { model: 'X 4WD 5-seat', baseYear: 2023, engineDesc: 'EV • 428 л.с. • 4WD', engineCc: 0, hp: 428, isEv: true, priceForeign: 210000, img: 'img/car_zeekr.png' }
+        { model: '001 RWD (Single Motor)', baseYear: 2023, engineDesc: 'EV • 272 л.с. • RWD', engineCc: 0, hp: 272, isEv: true, priceForeign: 269000, bodyType: 'sedan', img: 'img/car_zeekr.png' },
+        { model: '001 You 100kWh (4WD)', baseYear: 2023, engineDesc: 'EV • 544 л.с. • 4WD', engineCc: 0, hp: 544, isEv: true, priceForeign: 320000, bodyType: 'sedan', img: 'img/car_zeekr.png' },
+        { model: '007 4WD', baseYear: 2024, engineDesc: 'EV • 646 л.с. • 4WD', engineCc: 0, hp: 646, isEv: true, priceForeign: 265000, bodyType: 'sedan' },
+        { model: 'X 4WD 5-seat', baseYear: 2023, engineDesc: 'EV • 428 л.с. • 4WD', engineCc: 0, hp: 428, isEv: true, priceForeign: 210000, bodyType: 'suv' }
       ],
       'Changan': [
-        { model: 'CS55 Plus II', baseYear: 2022, engineDesc: '1.5 л Turbo • 181 л.с.', engineCc: 1494, hp: 181, priceForeign: 115000, img: 'img/car_monjaro.png' },
-        { model: 'UNI-K 2.0 AWD', baseYear: 2022, engineDesc: '2.0 л Turbo • 226 л.с.', engineCc: 1998, hp: 226, priceForeign: 165000, img: 'img/car_monjaro.png' }
+        { model: 'CS55 Plus II', baseYear: 2022, engineDesc: '1.5 л Turbo • 181 л.с.', engineCc: 1494, hp: 181, priceForeign: 115000, bodyType: 'suv' },
+        { model: 'UNI-K 2.0 AWD', baseYear: 2022, engineDesc: '2.0 л Turbo • 226 л.с.', engineCc: 1998, hp: 226, priceForeign: 165000, bodyType: 'suv' }
       ]
     }
   },
   japan: {
     brands: {
       'Toyota': [
-        { model: 'Camry 2.5 Hybrid', baseYear: 2021, engineDesc: '2.5 л Hybrid • 211 л.с.', engineCc: 2487, hp: 211, priceForeign: 2800000, img: 'img/car_avante.png' },
-        { model: 'RAV4 2.0 4WD', baseYear: 2021, engineDesc: '2.0 л • 171 л.с.', engineCc: 1986, hp: 171, priceForeign: 2600000, img: 'img/car_genesis.png' },
-        { model: 'Land Cruiser Prado 150', baseYear: 2021, engineDesc: '2.7 л • 163 л.с.', engineCc: 2693, hp: 163, priceForeign: 3800000, img: 'img/car_genesis.png' },
-        { model: 'Harrier 2.0 G', baseYear: 2021, engineDesc: '2.0 л • 171 л.с.', engineCc: 1986, hp: 171, priceForeign: 3100000, img: 'img/car_genesis.png' },
-        { model: 'Alphard 2.5', baseYear: 2021, engineDesc: '2.5 л • 182 л.с.', engineCc: 2493, hp: 182, priceForeign: 4400000, img: 'img/car_k5.png' }
+        { model: 'Camry 2.5 Hybrid', baseYear: 2021, engineDesc: '2.5 л Hybrid • 211 л.с.', engineCc: 2487, hp: 211, priceForeign: 2800000, bodyType: 'sedan' },
+        { model: 'RAV4 2.0 4WD', baseYear: 2021, engineDesc: '2.0 л • 171 л.с.', engineCc: 1986, hp: 171, priceForeign: 2600000, bodyType: 'suv' },
+        { model: 'Land Cruiser Prado 150', baseYear: 2021, engineDesc: '2.7 л • 163 л.с.', engineCc: 2693, hp: 163, priceForeign: 3800000, bodyType: 'suv' },
+        { model: 'Harrier 2.0 G', baseYear: 2021, engineDesc: '2.0 л • 171 л.с.', engineCc: 1986, hp: 171, priceForeign: 3100000, bodyType: 'suv' },
+        { model: 'Alphard 2.5', baseYear: 2021, engineDesc: '2.5 л • 182 л.с.', engineCc: 2493, hp: 182, priceForeign: 4400000, bodyType: 'suv' }
       ],
       'Honda': [
-        { model: 'CR-V 1.5 Turbo', baseYear: 2021, engineDesc: '1.5 л Turbo • 190 л.с.', engineCc: 1496, hp: 190, priceForeign: 2300000, img: 'img/car_genesis.png' },
-        { model: 'Stepwgn Spada 1.5', baseYear: 2021, engineDesc: '1.5 л Turbo • 150 л.с.', engineCc: 1496, hp: 150, priceForeign: 2500000, img: 'img/car_k5.png' },
-        { model: 'Vezel 1.5 e:HEV', baseYear: 2022, engineDesc: '1.5 л Hybrid • 131 л.с.', engineCc: 1496, hp: 131, priceForeign: 1950000, img: 'img/car_avante.png' }
+        { model: 'CR-V 1.5 Turbo', baseYear: 2021, engineDesc: '1.5 л Turbo • 190 л.с.', engineCc: 1496, hp: 190, priceForeign: 2300000, bodyType: 'suv' },
+        { model: 'Stepwgn Spada 1.5', baseYear: 2021, engineDesc: '1.5 л Turbo • 150 л.с.', engineCc: 1496, hp: 150, priceForeign: 2500000, bodyType: 'suv' },
+        { model: 'Vezel 1.5 e:HEV', baseYear: 2022, engineDesc: '1.5 л Hybrid • 131 л.с.', engineCc: 1496, hp: 131, priceForeign: 1950000, bodyType: 'suv' }
       ],
       'Mazda': [
-        { model: 'CX-5 2.2 Diesel AWD', baseYear: 2021, engineDesc: '2.2 л Дизель • 190 л.с.', engineCc: 2188, hp: 190, priceForeign: 2200000, img: 'img/car_genesis.png' },
-        { model: 'CX-8 2.2 Diesel', baseYear: 2021, engineDesc: '2.2 л Дизель • 190 л.с.', engineCc: 2188, hp: 190, priceForeign: 2700000, img: 'img/car_genesis.png' },
-        { model: 'Mazda 6 2.0', baseYear: 2021, engineDesc: '2.0 л • 156 л.с.', engineCc: 1997, hp: 156, priceForeign: 1800000, img: 'img/car_avante.png' }
+        { model: 'CX-5 2.2 Diesel AWD', baseYear: 2021, engineDesc: '2.2 л Дизель • 190 л.с.', engineCc: 2188, hp: 190, priceForeign: 2200000, bodyType: 'suv' },
+        { model: 'CX-8 2.2 Diesel', baseYear: 2021, engineDesc: '2.2 л Дизель • 190 л.с.', engineCc: 2188, hp: 190, priceForeign: 2700000, bodyType: 'suv' },
+        { model: 'Mazda 6 2.0', baseYear: 2021, engineDesc: '2.0 л • 156 л.с.', engineCc: 1997, hp: 156, priceForeign: 1800000, bodyType: 'sedan' }
       ],
       'Nissan': [
-        { model: 'X-Trail e-POWER 4WD', baseYear: 2022, engineDesc: '1.5 л Turbo Hybrid • 204 л.с.', engineCc: 1497, hp: 204, priceForeign: 2900000, img: 'img/car_monjaro.png' },
-        { model: 'Serena e-POWER', baseYear: 2021, engineDesc: '1.2 л Hybrid • 136 л.с.', engineCc: 1198, hp: 136, priceForeign: 2400000, img: 'img/car_k5.png' },
-        { model: 'Note e-POWER', baseYear: 2022, engineDesc: '1.2 л Hybrid • 116 л.с.', engineCc: 1198, hp: 116, priceForeign: 1450000, img: 'img/car_avante.png' }
+        { model: 'X-Trail e-POWER 4WD', baseYear: 2022, engineDesc: '1.5 л Turbo Hybrid • 204 л.с.', engineCc: 1497, hp: 204, priceForeign: 2900000, bodyType: 'suv' },
+        { model: 'Serena e-POWER', baseYear: 2021, engineDesc: '1.2 л Hybrid • 136 л.с.', engineCc: 1198, hp: 136, priceForeign: 2400000, bodyType: 'suv' },
+        { model: 'Note e-POWER', baseYear: 2022, engineDesc: '1.2 л Hybrid • 116 л.с.', engineCc: 1198, hp: 116, priceForeign: 1450000, bodyType: 'sedan' }
       ],
       'Subaru': [
-        { model: 'Forester 2.0 e-BOXER', baseYear: 2021, engineDesc: '2.0 л Hybrid • 145 л.с.', engineCc: 1995, hp: 145, priceForeign: 2400000, img: 'img/car_genesis.png' },
-        { model: 'Outback 1.8 Turbo AWD', baseYear: 2021, engineDesc: '1.8 л Turbo • 177 л.с.', engineCc: 1795, hp: 177, priceForeign: 3300000, img: 'img/car_genesis.png' }
+        { model: 'Forester 2.0 e-BOXER', baseYear: 2021, engineDesc: '2.0 л Hybrid • 145 л.с.', engineCc: 1995, hp: 145, priceForeign: 2400000, bodyType: 'suv' },
+        { model: 'Outback 1.8 Turbo AWD', baseYear: 2021, engineDesc: '1.8 л Turbo • 177 л.с.', engineCc: 1795, hp: 177, priceForeign: 3300000, bodyType: 'suv' }
       ]
     }
   },
   uae: {
     brands: {
       'Toyota': [
-        { model: 'Land Cruiser 300 3.5T', baseYear: 2022, engineDesc: '3.5 л V6 Twin-Turbo • 415 л.с.', engineCc: 3444, hp: 415, priceForeign: 285000, img: 'img/car_genesis.png' },
-        { model: 'Prado 250 2.4T', baseYear: 2024, engineDesc: '2.4 л Turbo • 281 л.с.', engineCc: 2393, hp: 281, priceForeign: 195000, img: 'img/car_genesis.png' },
-        { model: 'Camry 2.5', baseYear: 2022, engineDesc: '2.5 л • 204 л.с.', engineCc: 2487, hp: 204, priceForeign: 105000, img: 'img/car_avante.png' }
+        { model: 'Land Cruiser 300 3.5T', baseYear: 2022, engineDesc: '3.5 л V6 Twin-Turbo • 415 л.с.', engineCc: 3444, hp: 415, priceForeign: 285000, bodyType: 'suv' },
+        { model: 'Prado 250 2.4T', baseYear: 2024, engineDesc: '2.4 л Turbo • 281 л.с.', engineCc: 2393, hp: 281, priceForeign: 195000, bodyType: 'suv' },
+        { model: 'Camry 2.5', baseYear: 2022, engineDesc: '2.5 л • 204 л.с.', engineCc: 2487, hp: 204, priceForeign: 105000, bodyType: 'sedan' }
       ],
       'Lexus': [
-        { model: 'LX600 3.5T VIP', baseYear: 2022, engineDesc: '3.5 л V6 Twin-Turbo • 415 л.с.', engineCc: 3444, hp: 415, priceForeign: 465000, img: 'img/car_genesis.png' },
-        { model: 'RX350 2.4T AWD', baseYear: 2023, engineDesc: '2.4 л Turbo • 279 л.с.', engineCc: 2393, hp: 279, priceForeign: 245000, img: 'img/car_genesis.png' },
-        { model: 'ES250 2.5', baseYear: 2022, engineDesc: '2.5 л • 204 л.с.', engineCc: 2487, hp: 204, priceForeign: 175000, img: 'img/car_avante.png' }
+        { model: 'LX600 3.5T VIP', baseYear: 2022, engineDesc: '3.5 л V6 Twin-Turbo • 415 л.с.', engineCc: 3444, hp: 415, priceForeign: 465000, bodyType: 'suv' },
+        { model: 'RX350 2.4T AWD', baseYear: 2023, engineDesc: '2.4 л Turbo • 279 л.с.', engineCc: 2393, hp: 279, priceForeign: 245000, bodyType: 'suv' },
+        { model: 'ES250 2.5', baseYear: 2022, engineDesc: '2.5 л • 204 л.с.', engineCc: 2487, hp: 204, priceForeign: 175000, bodyType: 'sedan' }
       ],
       'Nissan': [
-        { model: 'Patrol 5.6 V8 Platinum', baseYear: 2022, engineDesc: '5.6 л V8 • 400 л.с.', engineCc: 5552, hp: 400, priceForeign: 265000, img: 'img/car_genesis.png' },
-        { model: 'X-Terra 2.5 4WD', baseYear: 2022, engineDesc: '2.5 л • 165 л.с.', engineCc: 2488, hp: 165, priceForeign: 120000, img: 'img/car_monjaro.png' }
+        { model: 'Patrol 5.6 V8 Platinum', baseYear: 2022, engineDesc: '5.6 л V8 • 400 л.с.', engineCc: 5552, hp: 400, priceForeign: 265000, bodyType: 'suv' },
+        { model: 'X-Terra 2.5 4WD', baseYear: 2022, engineDesc: '2.5 л • 165 л.с.', engineCc: 2488, hp: 165, priceForeign: 120000, bodyType: 'suv' }
       ],
       'Porsche': [
-        { model: 'Cayenne 3.0T AWD', baseYear: 2022, engineDesc: '3.0 л V6 Turbo • 340 л.с.', engineCc: 2995, hp: 340, priceForeign: 375000, img: 'img/hero_car.jpg' }
+        { model: 'Cayenne 3.0T AWD', baseYear: 2022, engineDesc: '3.0 л V6 Turbo • 340 л.с.', engineCc: 2995, hp: 340, priceForeign: 375000, bodyType: 'suv' }
       ]
     }
   }
@@ -533,8 +553,66 @@ function populateModels() {
 
   if (models.length > 0) {
     currentModelData = models[0];
+    syncModelYear(currentModelData.baseYear);
     updateResultView();
   }
+}
+
+function syncModelYear(baseYear) {
+  const yearSelect = document.getElementById('selectYear');
+  const yr = parseInt(baseYear, 10);
+  if (!yr || !yearSelect) return;
+
+  const available = Array.from(yearSelect.options).map(o => o.value);
+  let target = String(yr);
+  if (!available.includes(target)) {
+    if (yr >= 2025) target = '2025';
+    else if (yr <= 2019) target = '2019';
+    else target = '2021';
+  }
+  selectedYear = target;
+  yearSelect.value = target;
+}
+
+function renderResultVisual({ imgSrc, bodyType = 'sedan', country = 'korea', isEv = false, altText = 'Авто' }) {
+  const resThumb = document.getElementById('resThumb');
+  const resSilhouette = document.getElementById('resSilhouette');
+
+  if (imgSrc && resThumb) {
+    resThumb.src = imgSrc;
+    resThumb.alt = altText;
+    resThumb.style.display = 'block';
+    if (resSilhouette) resSilhouette.style.display = 'none';
+    return;
+  }
+
+  if (resThumb) resThumb.style.display = 'none';
+  if (resSilhouette) {
+    const flagSvg = COUNTRY_FLAGS_SVG[country] || COUNTRY_FLAGS_SVG.korea;
+    const carSvg = CAR_SILHOUETTES_SVG[bodyType] || CAR_SILHOUETTES_SVG.sedan;
+    const typeLabel = isEv ? 'EV' : (bodyType === 'suv' ? 'SUV' : 'Sedan');
+    resSilhouette.innerHTML = `
+      <div class="placeholder-top">
+        ${flagSvg}
+        <span class="placeholder-badge">${typeLabel}</span>
+      </div>
+      <div class="placeholder-car-icon">${carSvg}</div>
+    `;
+    resSilhouette.style.display = 'flex';
+  }
+}
+
+function getFormulaNoteHtml(calc, ageCategory) {
+  if (calc.isEv) {
+    return '💡 <em>Справка по расчёту (электромобиль EV):</em> применяется Единый таможенный тариф (СТП): пошлина 15% от стоимости + акциз по мощности в л.с. (ст. 193 НК РФ) + НДС 22% (с 2026 г.). Льготный утильсбор доступен физлицам только при мощности ≤ 160 л.с.';
+  }
+  if (ageCategory === 'under_3') {
+    return '💡 <em>Справка по расчёту (авто до 3 лет):</em> пошлина рассчитывается по шкале Решения ЕЭК № 107 в процентах от стоимости в евро (54% до 8 500 € и 48% свыше), но не ниже минимальной ставки за 1 см³ (от 2.5 до 20 €/см³). Курсы валют ЦБ РФ обновляются онлайн.';
+  }
+  if (ageCategory === 'over_5') {
+    return '💡 <em>Справка по расчёту (авто старше 5 лет):</em> применяется повышенная единая ставка ЕЭК № 107 строго в евро за 1 см³ объёма двигателя (от 3.0 до 5.7 €/см³). Курсы валют подтягиваются с ЦБ РФ в реальном времени.';
+  }
+  return '💡 <em>Справка по расчёту (проходное авто 3–5 лет):</em> пошлина рассчитывается строго в евро за 1 см³ объёма двигателя (Решение ЕЭК № 107), а не 48% (48% применяется для авто до 3 лет). Курсы валют подтягиваются с ЦБ РФ в реальном времени.';
 }
 
 function updateImportTypeHint(importHint, engineCc, horsepower, isEv) {
@@ -588,7 +666,10 @@ function updateResultView() {
   let calc = null;
   let carName = '';
   let specsText = '';
-  let imgSrc = 'img/calc_cars.png';
+  let imgSrc = null;
+  let previewBodyType = 'sedan';
+  let previewIsEv = false;
+  let activeAgeCategory = '3_to_5';
   let foreignSummary = '';
 
   const countryConfig = APP_CONFIG.countries[currentCountry] || APP_CONFIG.countries.korea;
@@ -602,9 +683,12 @@ function updateResultView() {
     const rawHp = parseInt(document.getElementById('encarHpInput')?.value, 10);
     const horsepower = (!isNaN(rawHp) && rawHp > 0) ? rawHp : (countryConfig.defaultHp || 160);
     const ageCategory = document.getElementById('encarAgeSelect')?.value || '3_to_5';
+    activeAgeCategory = ageCategory;
     const lotInput = document.getElementById('encarLotInput')?.value.trim();
 
     const isEv = engineCc === 0;
+    previewIsEv = isEv;
+    previewBodyType = (isEv || engineCc >= 2200) ? 'suv' : 'sedan';
     updateImportTypeHint(importHint, engineCc, horsepower, isEv);
 
     if (window.AutoCalculator) {
@@ -626,11 +710,7 @@ function updateResultView() {
     const ageLabel = ageCategory === '3_to_5' ? '3–5 лет (проходной)' : (ageCategory === 'under_3' ? 'до 3 лет (свежий)' : 'старше 5 лет');
     specsText = isEv ? `Электромобиль (EV) • ${horsepower} л.с. • ${ageLabel}` : `${(engineCc / 1000).toFixed(1)} л (${engineCc} см³) • ${horsepower ? `${horsepower} л.с. • ` : ''}${ageLabel}`;
 
-    if (currentCountry === 'korea') imgSrc = 'img/car_k5.png';
-    else if (currentCountry === 'china') imgSrc = isEv ? 'img/car_zeekr.png' : 'img/car_monjaro.png';
-    else if (currentCountry === 'japan') imgSrc = 'img/car_avante.png';
-    else imgSrc = 'img/car_genesis.png';
-
+    imgSrc = null;
     foreignSummary = formatForeign(priceForeign, currentCountry);
 
   } else {
@@ -648,7 +728,7 @@ function updateResultView() {
       resSub.textContent = `Рассчитаем любой лот из ${countryConfig.name} под ключ с фиксированной гарантией`;
       resTitle.textContent = `Индивидуальный подбор авто (${countryConfig.name})`;
       resSpecs.textContent = `${countryConfig.name} • Расчет по тарифам ФТС РФ 2026`;
-      if (resThumb) resThumb.src = 'img/car_other.png';
+      renderResultVisual({ imgSrc: null, bodyType: 'suv', country: currentCountry, isEv: false });
       if (orderBtnText) orderBtnText.textContent = 'Обсудить подбор с менеджером';
       return;
     }
@@ -656,8 +736,11 @@ function updateResultView() {
     if (!currentModelData) return;
 
     const ageCategory = getAgeCategoryFromYear(selectedYear);
+    activeAgeCategory = ageCategory;
     const engineCc = currentModelData.engineCc;
     const isEv = currentModelData.isEv || engineCc === 0;
+    previewIsEv = isEv;
+    previewBodyType = currentModelData.bodyType || 'sedan';
     const horsepower = currentModelData.hp || 272;
 
     updateImportTypeHint(importHint, engineCc, horsepower, isEv);
@@ -678,7 +761,7 @@ function updateResultView() {
 
     carName = `${currentBrand} ${currentModelData.model}`;
     specsText = `${selectedYear} год • ${currentModelData.engineDesc}`;
-    imgSrc = currentModelData.img || 'img/calc_cars.png';
+    imgSrc = currentModelData.img || null;
     foreignSummary = formatForeign(currentModelData.priceForeign, currentCountry);
   }
 
@@ -695,7 +778,18 @@ function updateResultView() {
   resTitle.textContent = carName;
   resSpecs.textContent = specsText;
   if (orderBtnText) orderBtnText.textContent = 'Оставить заявку на этот автомобиль';
-  if (resThumb) resThumb.src = imgSrc;
+  renderResultVisual({
+    imgSrc,
+    bodyType: previewBodyType,
+    country: currentCountry,
+    isEv: previewIsEv,
+    altText: carName
+  });
+
+  const formulaNoteEl = document.getElementById('drawerFormulaNote');
+  if (formulaNoteEl) {
+    formulaNoteEl.innerHTML = getFormulaNoteHtml(calc, activeAgeCategory);
+  }
 
   // Update Breakdown Drawer Rows
   const dCost = document.getElementById('detailCarCost');
@@ -921,6 +1015,7 @@ function setupSelectListeners() {
       const found = models.find(m => m.model === e.target.value);
       if (found) {
         currentModelData = found;
+        syncModelYear(found.baseYear);
         updateResultView();
       }
     });
@@ -1159,6 +1254,10 @@ function setupModals() {
 
   function openLeadModalWithData() {
     modalOpenedAt = Date.now();
+    const platformHint = document.getElementById('modalPlatformHint');
+    if (platformHint) {
+      platformHint.textContent = COUNTRY_PLATFORM_HINTS[currentCountry] || 'на зарубежных площадках';
+    }
     if (modalSummaryBox) {
       const cfg = APP_CONFIG.countries[currentCountry] || APP_CONFIG.countries.korea;
       const resTitle = document.getElementById('resTitle')?.textContent || 'Авто под заказ';
@@ -1393,13 +1492,12 @@ function setupModals() {
         timestamp: new Date().toISOString()
       };
 
-      localStorage.setItem('lead_last_sent_ts', Date.now().toString());
-
       // Smart Multi-Environment Lead Dispatch
       const isGitHubPages = window.location.hostname.endsWith('github.io');
       const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
 
-      let isDemoMode = isGitHubPages;
+      let isDemoMode = isGitHubPages || isLocal;
+      let dispatchErrorMsg = null;
 
       if (!isGitHubPages && !isLocal) {
         try {
@@ -1409,17 +1507,47 @@ function setupModals() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
           });
-          if (!resp.ok) {
+
+          if (resp.ok) {
+            isDemoMode = false;
+          } else if (resp.status === 404 || resp.status === 405) {
             console.info(`Lead API returned HTTP ${resp.status}. Using demo mode presentation.`);
             isDemoMode = true;
+          } else {
+            let serverErr = '';
+            try {
+              const errJson = await resp.json();
+              if (errJson && typeof errJson.error === 'string') {
+                serverErr = errJson.error;
+              }
+            } catch (_) {}
+
+            if (resp.status === 400) {
+              dispatchErrorMsg = serverErr || 'Проверьте корректность заполнения полей заявки и согласия 152-ФЗ.';
+            } else if (resp.status === 429) {
+              dispatchErrorMsg = serverErr || 'Слишком много запросов. Повторите попытку через минуту.';
+            } else {
+              dispatchErrorMsg = `Ошибка сервера при обработке заявки (HTTP ${resp.status}). Попробуйте ещё раз или напишите нам в Telegram.`;
+            }
           }
         } catch (dispatchErr) {
-          console.info('Backend lead dispatch note:', dispatchErr.message);
-          isDemoMode = true;
+          dispatchErrorMsg = 'Не удалось связаться с сервером. Проверьте подключение к интернету и попробуйте снова.';
         }
-      } else {
-        isDemoMode = true;
       }
+
+      if (dispatchErrorMsg) {
+        if (modalError) {
+          modalError.textContent = dispatchErrorMsg;
+          modalError.style.display = 'block';
+        }
+        if (submitBtn) {
+          submitBtn.disabled = consentCheck ? !consentCheck.checked : false;
+          submitBtn.innerHTML = '<span>Отправить заявку менеджеру</span><span class="btn-arrow">→</span>';
+        }
+        return;
+      }
+
+      localStorage.setItem('lead_last_sent_ts', Date.now().toString());
 
       setTimeout(() => {
         if (modalFormView) modalFormView.style.display = 'none';
