@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ПроАвто — Калькулятор пригона автомобилей 2026</title>
+  <meta http-equiv="refresh" content="1; url=./index.html?brand=%D0%9F%D1%80%D0%BE%D0%90%D0%B2%D1%82%D0%BE&theme=proavto&tg=proavto_krd&country=korea">
+  <style>
+    body {
+      background-color: #0B0D12;
+      color: #E5E7EB;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .splash-card {
+      text-align: center;
+      max-width: 360px;
+      background: #181B26;
+      border: 1px solid #262B3A;
+      border-radius: 14px;
+      padding: 32px 24px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3.5px solid rgba(229, 46, 46, 0.2);
+      border-top-color: #E52E2E;
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+      margin: 0 auto 18px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    h2 {
+      font-size: 19px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin: 0 0 8px;
+    }
+    p {
+      font-size: 13px;
+      color: #9CA3AF;
+      line-height: 1.45;
+      margin: 0 0 16px;
+    }
+    a {
+      color: #E52E2E;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+  <script>
+    (function () {
+      var target = './index.html?brand=' + encodeURIComponent('ПроАвто') + '&theme=proavto&tg=proavto_krd&country=korea';
+      // Forward any extra hash or query parameters seamlessly
+      if (window.location.hash) {
+        target += window.location.hash;
+      }
+      window.location.replace(target);
+    })();
+  </script>
+</head>
+<body>
+  <div class="splash-card">
+    <div class="spinner"></div>
+    <h2>«ПроАвто»</h2>
+    <p>Запуск интерактивного калькулятора пригона авто...</p>
+    <p><small>Если переход не произошёл автоматически, <a href="./index.html?brand=%D0%9F%D1%80%D0%BE%D0%90%D0%B2%D1%82%D0%BE&theme=proavto&tg=proavto_krd&country=korea">нажмите здесь</a></small></p>
+  </div>
+</body>
+</html>
