@@ -159,6 +159,15 @@ body {
   text-decoration: none;
 }
 
+.brand-logo-img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  display: block;
+}
+
 .logo-text {
   display: flex;
   flex-direction: column;
@@ -1878,8 +1887,12 @@ body.theme-proavto .modal-error-msg,
     height: 22px;
     flex-shrink: 0;
   }
+  .brand-logo-img {
+    width: 32px;
+    height: 32px;
+  }
   .logo-main {
-    font-size: 16px;
+    font-size: 15px;
   }
   .logo-sub {
     display: none;

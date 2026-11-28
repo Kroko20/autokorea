@@ -122,6 +122,12 @@ const DEFAULT_CONFIG = {
       shadowPrimary: "0 8px 24px rgba(88, 51, 234, 0.22)"
     },
     proavto: {
+      logoUrl: "./img/proavto_logo.png",
+      commissionRub: 100000,
+      cityDeliveryRub: 250000,
+      cityDeliveryLabel: "Логистика до Краснодара (автовоз, ориент. 230–260 тыс. ₽):",
+      cityDeliveryShort: "Краснодар",
+      overrideInlandToZero: true,
       colorPrimary: "#E52E2E",
       colorPrimaryHover: "#C81E1E",
       colorPrimaryLight: "rgba(229, 46, 46, 0.16)",
@@ -362,6 +368,34 @@ async function loadConfig() {
   }
 }
 
+function applyBrandLogo(logoUrl, brandLabel) {
+  const containers = document.querySelectorAll('.brand-logo');
+  containers.forEach(container => {
+    const svgEl = container.querySelector('.logo-svg');
+    let imgEl = container.querySelector('.brand-logo-img');
+
+    if (logoUrl) {
+      if (svgEl) svgEl.style.display = 'none';
+      if (!imgEl) {
+        imgEl = document.createElement('img');
+        imgEl.className = 'brand-logo-img';
+        const textBlock = container.querySelector('.logo-text');
+        if (textBlock) {
+          container.insertBefore(imgEl, textBlock);
+        } else {
+          container.prepend(imgEl);
+        }
+      }
+      imgEl.src = logoUrl;
+      imgEl.alt = brandLabel || APP_CONFIG.brandName || 'Логотип';
+      imgEl.style.display = 'block';
+    } else {
+      if (imgEl) imgEl.style.display = 'none';
+      if (svgEl) svgEl.style.display = '';
+    }
+  });
+}
+
 function applyTheme(themeKey) {
   const key = themeKey || APP_CONFIG.theme || 'default';
   const themeObj = (APP_CONFIG.themes && APP_CONFIG.themes[key]) || APP_CONFIG.themes.default;
@@ -377,6 +411,23 @@ function applyTheme(themeKey) {
   }
 
   if (themeObj) {
+    if (themeObj.commissionRub !== undefined && themeObj.commissionRub !== null) {
+      APP_CONFIG.commissionRub = Number(themeObj.commissionRub);
+    } else {
+      APP_CONFIG.commissionRub = DEFAULT_CONFIG.commissionRub;
+    }
+    APP_CONFIG.cityDeliveryRub = Number(themeObj.cityDeliveryRub) || 0;
+    APP_CONFIG.cityDeliveryLabel = themeObj.cityDeliveryLabel || '';
+    APP_CONFIG.cityDeliveryShort = themeObj.cityDeliveryShort || '';
+    APP_CONFIG.overrideInlandToZero = Boolean(themeObj.overrideInlandToZero);
+    if (themeObj.logoUrl !== undefined) {
+      applyBrandLogo(themeObj.logoUrl, key === 'proavto' ? 'ПроАвто' : APP_CONFIG.brandName);
+    } else if (APP_CONFIG.logoUrl) {
+      applyBrandLogo(APP_CONFIG.logoUrl, APP_CONFIG.brandName);
+    } else {
+      applyBrandLogo('', APP_CONFIG.brandName);
+    }
+
     if (themeObj.colorPrimary) root.style.setProperty('--color-primary', themeObj.colorPrimary);
     if (themeObj.colorPrimaryHover) root.style.setProperty('--color-primary-hover', themeObj.colorPrimaryHover);
     if (themeObj.colorPrimaryLight) root.style.setProperty('--color-primary-light', themeObj.colorPrimaryLight);
@@ -773,7 +824,10 @@ function updateResultView() {
   resCaption.textContent = 'Точный расчет под ключ:';
   const utilReasonFull = getUtilReasonLabel(calc);
   const utilNoteInBanner = utilReasonFull === 'льготный физлиц' ? 'льготный' : utilReasonFull;
-  resSub.textContent = `Включает: авто на аукционе, растаможку ФТС${calc.isEv ? ' (СТП)' : ''}, утильсбор (${utilNoteInBanner}), логистику и СБКТС/ЭПТС`;
+  const deliveryShortNote = (calc.cityDeliveryRub > 0 && APP_CONFIG.cityDeliveryShort)
+    ? `логистику до г. ${APP_CONFIG.cityDeliveryShort}`
+    : 'логистику';
+  resSub.textContent = `Включает: авто на аукционе, растаможку ФТС${calc.isEv ? ' (СТП)' : ''}, утильсбор (${utilNoteInBanner}), ${deliveryShortNote} и СБКТС/ЭПТС`;
   resPrice.textContent = formatPrice(calc.totalRub);
   resTitle.textContent = carName;
   resSpecs.textContent = specsText;
@@ -803,6 +857,18 @@ function updateResultView() {
 
   if (dCost) dCost.innerHTML = `${formatPrice(calc.carCostRub)} <span class="sub-cost-tag" id="detailForeignPrice">(${foreignSummary})</span>`;
   if (dFreight) dFreight.textContent = formatPrice(calc.freightAndOriginRub);
+  const dCityRow = document.getElementById('detailCityDeliveryRow');
+  const dCityLabel = document.getElementById('detailCityDeliveryLabel');
+  const dCityVal = document.getElementById('detailCityDelivery');
+  if (dCityRow) {
+    if (calc.cityDeliveryRub > 0) {
+      dCityRow.style.display = '';
+      if (dCityLabel && APP_CONFIG.cityDeliveryLabel) dCityLabel.textContent = APP_CONFIG.cityDeliveryLabel;
+      if (dCityVal) dCityVal.textContent = formatPrice(calc.cityDeliveryRub);
+    } else {
+      dCityRow.style.display = 'none';
+    }
+  }
   if (dDuty) dDuty.innerHTML = `${formatPrice(calc.customsDutyRub)} <span class="sub-cost-tag" id="detailDutyFormula">(${calc.dutyFormulaDesc})</span>`;
   if (dDutyTag) dDutyTag.textContent = calc.dutyTag;
   if (dCustomsFee) dCustomsFee.textContent = formatPrice(calc.customsFeeRub);
@@ -1177,6 +1243,9 @@ function applyUrlPersonalization() {
     const tabEncar = document.getElementById('tabModeEncar');
     if (tabEncar) tabEncar.click();
   }
+
+  // Refresh calculation view so theme-level commission/logo overrides take effect immediately
+  updateResultView();
 }
 
 // -------------------------------------------------------------

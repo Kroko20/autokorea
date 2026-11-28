@@ -113,6 +113,12 @@
       "shadowPrimary": "0 8px 24px rgba(88, 51, 234, 0.22)"
     },
     "proavto": {
+      "logoUrl": "./img/proavto_logo.png",
+      "commissionRub": 100000,
+      "cityDeliveryRub": 250000,
+      "cityDeliveryLabel": "Логистика до Краснодара (автовоз, ориент. 230–260 тыс. ₽):",
+      "cityDeliveryShort": "Краснодар",
+      "overrideInlandToZero": true,
       "colorPrimary": "#E52E2E",
       "colorPrimaryHover": "#C81E1E",
       "colorPrimaryLight": "rgba(229, 46, 46, 0.16)",

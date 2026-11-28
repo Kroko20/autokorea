@@ -350,10 +350,10 @@
   /**
    * 4. Logistics & Local Export Expenses
    */
-  function calculateLogistics({ country = 'korea', rates, configCountrySettings = {} }) {
+  function calculateLogistics({ country = 'korea', rates, configCountrySettings = {}, skipBaseInland = false }) {
     const localForeign = Number(configCountrySettings.localCostsForeign) || 0;
     const freightUsd = Number(configCountrySettings.seaFreightUsd) || 0;
-    const inlandRub = Number(configCountrySettings.inlandDeliveryRub) || 0;
+    const inlandRub = skipBaseInland ? 0 : (Number(configCountrySettings.inlandDeliveryRub) || 0);
 
     let localRub = 0;
     if (country === 'korea') {
@@ -460,10 +460,12 @@
 
     // 5. Logistics & Origin Country Costs
     const countryCfg = (config.countries && config.countries[country]) || {};
+    const cityDeliveryRub = Math.max(0, Number(config.cityDeliveryRub) || 0);
     const logisticsResult = calculateLogistics({
       country,
       rates,
-      configCountrySettings: countryCfg
+      configCountrySettings: countryCfg,
+      skipBaseInland: Boolean(config.overrideInlandToZero && cityDeliveryRub > 0)
     });
 
     // 6. Paperwork & Broker (СБКТС, ЭПТС, лаборатория)
@@ -473,7 +475,7 @@
     const commissionRub = Number(config.commissionRub) || 120000;
 
     // 8. Grand Total Turnkey
-    const totalRub = carCostRub + customsTotalRub + logisticsResult.totalLogisticsRub + paperworkAndCertRub + commissionRub;
+    const totalRub = carCostRub + customsTotalRub + logisticsResult.totalLogisticsRub + cityDeliveryRub + paperworkAndCertRub + commissionRub;
 
     return {
       country,
@@ -507,6 +509,7 @@
       customsTotalRub,
       logistics: logisticsResult,
       freightAndOriginRub: logisticsResult.totalLogisticsRub,
+      cityDeliveryRub,
       paperworkAndCertRub,
       commissionRub,
       totalRub
